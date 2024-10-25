@@ -1,0 +1,32 @@
+.menu-page-wrapper {
+  min-height: 100%;
+  flex: 1;
+  position: relative;
+  .menu-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url(../../images/background.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: -1;
+    filter: brightness(40%);
+  }
+}
+
+.container {
+  display: grid;
+  padding-block: 80px;
+  justify-content: center;
+  column-gap: 5rem;
+  row-gap: 30px;
+  grid-template-columns: repeat(3, min-content);
+  img {
+    height: 150px;
+  }
+  a {
+    text-decoration: none;
+  }
+}

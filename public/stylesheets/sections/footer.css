@@ -1,0 +1,12 @@
+.footer-container {
+  color: rgb(122, 132, 143);
+  background-color: rgb(26, 26, 26);
+  text-align: center;
+  p.copyright {
+    margin: 0;
+    font-size: 24px;
+    padding-block: 15px;
+    font-family: "Arima Madurai";
+    font-weight: 600;
+  }
+}

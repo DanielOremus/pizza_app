@@ -1,0 +1,40 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  padding: 50px 30px;
+  background-color: rgba(0, 0, 0, 0.642);
+  backdrop-filter: blur(5px);
+  border-radius: 25px;
+  gap: 15px;
+  color: white;
+  .card__image {
+    padding-inline: 10px;
+    width: 220px;
+    height: 220px;
+  }
+  .card__title,
+  .card__price {
+    font-size: 24px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+  }
+  .card__actions {
+    margin-top: 5px;
+    .btn,
+    a {
+      width: 100%;
+    }
+    .btn {
+      font-family: Verdana, Geneva, Tahoma, sans-serif;
+
+      text-transform: uppercase;
+      border-radius: 15px;
+      font-size: 20px;
+      font-weight: 500;
+      padding-block: 5px;
+    }
+    & > :last-child {
+      margin-top: 15px;
+    }
+  }
+}

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%=title%></title>
+    <script src="/javascripts/RequestManager.js"></script>
+    <script src="/javascripts/DropArea.js"></script>
+    <link rel="stylesheet" href="/stylesheets/fonts.css" />
+    <link rel="stylesheet" href="/stylesheets/main.css" />
+    <link rel="stylesheet" href="/stylesheets/sections/header.css" />
+    <link rel="stylesheet" href="/stylesheets/sections/footer.css" />
+    <link rel="stylesheet" href="/stylesheets/menu/list.css" />
+    <link rel="stylesheet" href="/stylesheets/menu/card.css" />
+    <link rel="stylesheet" href="/stylesheets/menu/form.css" />
+  </head>
+  <body>
+    <div class="wrapper">
+      <%- include("../sections/header.ejs")%>
+      <main><%- include(body) %></main>
+      <%- include("../sections/footer.ejs")%>
+    </div>
+  </body>
+</html>

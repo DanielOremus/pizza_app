@@ -1,0 +1,73 @@
+<div class="form-page-wrapper">
+  <div class="form-background"></div>
+  <div class="form-container">
+    <%if(errors?.length){%> <%errors.forEach(err=>{%>
+    <div><%= err.msg%></div>
+    <%})%> <%}%>
+    <form
+      class="form"
+      action="/menu/form/<%= meal? meal.id : ''%>"
+      method="post"
+      enctype="multipart/form-data"
+    >
+      <div class="row-1">
+        <div class="image__container">
+          <div class="drop-area" alt="">
+            <img
+              id="image"
+              src="/<%=meal?.imgSrc%>"
+              onerror="DropArea.hideImg(this)"
+            />
+            <span class="drop-text">Click Me</span>
+            <input
+              type="file"
+              id="mealImage"
+              name="image"
+              onchange="DropArea.handleFileSelect(event, {imageSelector: '#image', dropTextSelector: '.drop-text'})"
+            />
+          </div>
+        </div>
+        <div class="fields__container">
+          <div>
+            <label for="mealTitle">Title:</label>
+            <input
+              placeholder="Title"
+              type="text"
+              class="field"
+              id="mealTitle"
+              name="title"
+              value="<%=meal?.title%>"
+            />
+          </div>
+          <div>
+            <label for="mealPrice">Price:</label>
+
+            <input
+              placeholder="Price"
+              type="text"
+              class="field"
+              id="mealPrice"
+              name="price"
+              value="<%=meal?.price%>"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="row-2">
+        <div class="actions__container">
+          <button class="btn" type="submit">
+            <%= meal?.id ? 'Update' : 'Add'%>
+          </button>
+
+          <button
+            class="btn"
+            type="button"
+            onclick="window.location.href = '/menu'"
+          >
+            Go Back
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

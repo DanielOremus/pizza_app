@@ -1,0 +1,29 @@
+<div class="menu-page-wrapper">
+  <div class="menu-background"></div>
+  <div class="container">
+    <%for (const meal of mealList){%>
+    <div class="card">
+      <img
+        class="card__image"
+        src="/<%= meal.imgSrc ? meal.imgSrc : 'no_image.png' %>"
+        alt=""
+      />
+
+      <span class="card__title"><%=meal.title%></span>
+      <span class="card__price"><%=meal.price%> ₴</span>
+
+      <div class="card__actions">
+        <a href="/menu/form/<%=meal.id%>">
+          <button class="btn">Edit</button>
+        </a>
+        <button
+          class="btn"
+          onclick="RequestManager.deleteRequest('/menu', {id: '<%=meal.id%>'})"
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+    <%}%>
+  </div>
+</div>
