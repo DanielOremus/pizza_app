@@ -1,0 +1,57 @@
+.about-page-wrapper {
+  min-height: 100%;
+  flex: 1;
+  position: relative;
+  .about-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url(../../images/about-background.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: -1;
+    filter: brightness(90%);
+  }
+  .about-container {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: center;
+    gap: 5rem;
+    .interior {
+      max-width: 60%;
+      border-radius: 20px;
+    }
+    .details-container {
+      background-color: rgba(0, 0, 0, 0.702);
+      backdrop-filter: blur(10px);
+      width: 35%;
+      padding: 20px;
+      border-radius: 25px;
+      display: flex;
+      flex-direction: column;
+      font-family: "Arima Madurai";
+      justify-content: space-evenly;
+      .section-name {
+        font-size: 24px;
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+      .title {
+        font-size: 34px;
+        color: white;
+        font-weight: 900;
+      }
+      .story {
+        margin: 0;
+        margin-top: 10px;
+        color: white;
+        /* font-weight: 500; */
+        font-size: 18.5px;
+      }
+    }
+  }
+}

@@ -2,8 +2,9 @@ import { Router } from "express"
 import MealController from "../controllers/MealController.mjs"
 import multer from "multer"
 import { v4 as uuidv4 } from "uuid"
-import { checkSchema, validationResult } from "express-validator"
 import MealValidator from "../middlewares/MealValidator.mjs"
+import ValidationController from "../controllers/ValidationController.mjs"
+import { checkSchema } from "express-validator"
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -14,20 +15,7 @@ const storage = multer.diskStorage({
     cb(null, filename)
   },
 })
-const fileFilter = function (req, file, cb) {
-  const validationErrors = validationResult(req) //Валідація даних
-  console.log("-------------errors----------")
-
-  console.log(validationErrors)
-
-  if (!validationErrors.isEmpty()) {
-    //Якщо є помилки, ігноруємо файл
-    return cb(null, false)
-  }
-  cb(null, true) //Інакше, закидуємо в uploads
-}
-
-const upload = multer({ storage, fileFilter })
+const upload = multer({ storage })
 
 const router = Router()
 
@@ -35,11 +23,11 @@ router.get("/", MealController.getList)
 router.get("/form/:id?", MealController.renderForm)
 
 router.post(
-  "/form/:id?",
+  "/form/validate/:id?",
   checkSchema(MealValidator.schema),
-  upload.single("image"),
-  MealController.updateMeal
+  ValidationController.validateMealFields
 )
+router.post("/form/:id?", upload.single("image"), MealController.updateMeal)
 
 router.delete("/", MealController.deleteMeal)
 

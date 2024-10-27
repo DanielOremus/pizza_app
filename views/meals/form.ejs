@@ -1,14 +1,19 @@
 <div class="form-page-wrapper">
   <div class="form-background"></div>
   <div class="form-container">
-    <%if(errors?.length){%> <%errors.forEach(err=>{%>
-    <div><%= err.msg%></div>
-    <%})%> <%}%>
+    <%if(errors?.length){%>
+    <div class="errors">
+      <%errors.forEach(err=>{%>
+      <span><%= err.msg%></span>
+      <%})%>
+    </div>
+    <%}%>
     <form
       class="form"
-      action="/menu/form/<%= meal? meal.id : ''%>"
+      action="/menu/form/validate"
       method="post"
-      enctype="multipart/form-data"
+      data-mealId="<%=meal?.id%>"
+      onsubmit="RequestManager.onFormSubmit(event)"
     >
       <div class="row-1">
         <div class="image__container">

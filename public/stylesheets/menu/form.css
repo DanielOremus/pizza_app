@@ -25,8 +25,7 @@
     width: 50%;
     min-width: 600px;
     color: white;
-    padding: 80px;
-    padding-bottom: 40px;
+    padding: 40px 80px;
   }
   .form {
     display: flex;
@@ -133,6 +132,15 @@
           }
         }
       }
+    }
+  }
+  .errors {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 18px;
+    color: rgb(222, 0, 0);
+    margin-bottom: 15px;
+    span {
+      display: block;
     }
   }
 }

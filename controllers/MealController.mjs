@@ -1,6 +1,5 @@
 import MealModel from "../models/MealModel.mjs"
-import { removeImageSync } from "../utils/ImageRemover.mjs"
-import { validationResult } from "express-validator"
+import { removeImageSync } from "../utils/ImageManager.mjs"
 
 class MealController {
   static async getList(req, res) {
@@ -28,32 +27,16 @@ class MealController {
       console.log(req.body)
 
       const id = req.params.id
-      // console.log(req)
-      console.log(req.body)
-
-      const errors = validationResult(req)
       const mealNewProps = req.body
-      if (!errors.isEmpty()) {
-        if (id) mealNewProps.id = id
-        return res.status(400).render("layouts/main", {
-          title: "Form",
-          body: "../meals/form",
-          meal: mealNewProps,
-          errors: errors.array(),
-        })
-        // return res.status(400).json(errors)
+
+      if (req.file) {
+        const mealObj = id ? await MealModel.getById(id) : null
+        removeImageSync(mealObj, "uploads")
+        mealNewProps.imgSrc = req.file.filename
       }
       if (id) {
-        const mealObj = await MealModel.getById(id)
-        if (req.file) {
-          removeImageSync(mealObj, "uploads")
-          mealNewProps.imgSrc = req.file.filename
-        }
         await MealModel.update(id, mealNewProps)
       } else {
-        if (req.file) {
-          mealNewProps.imgSrc = req.file.filename
-        }
         await MealModel.add(mealNewProps)
       }
 

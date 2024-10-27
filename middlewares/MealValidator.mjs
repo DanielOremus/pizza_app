@@ -1,8 +1,11 @@
+import { checkSchema, validationResult } from "express-validator"
+
 class MealValidator {
   static schema = {
     title: {
       notEmpty: {
         errorMessage: "Title is required",
+        bail: true,
       },
       isLength: {
         options: {
@@ -16,6 +19,7 @@ class MealValidator {
     price: {
       isNumeric: {
         errorMessage: "Price must be a number",
+        bail: true,
       },
       isInt: {
         options: {

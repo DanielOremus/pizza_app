@@ -13,9 +13,12 @@
     width: 220px;
     height: 220px;
   }
-  .card__title,
-  .card__price {
+  .card__title {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 24px;
+  }
+  .card__price {
+    font-size: 20px;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
   }
   .card__actions {
