@@ -36,14 +36,36 @@ class RequestManager {
 
     if (!validationResponse.ok) {
       const data = await validationResponse.text()
-      document.body.innerHTML = data
+      console.log(data)
+
+      const parser = new DOMParser()
+      const doc = parser.parseFromString(data, "text/html")
+      console.log(doc)
+
+      document.body.innerText = ""
+      document.body.append(...doc.body.children)
     } else {
-      const updateResponse = await fetch(`/menu/form/${id}`, {
+      const resData = await RequestManager.postRequest(
+        `/menu/form/${id}`,
+        formData
+      )
+
+      window.location = resData.url
+    }
+  }
+  static async postRequest(url, body) {
+    try {
+      const response = await fetch(url, {
         method: "POST",
-        body: formData,
+        body,
       })
 
-      window.location = updateResponse.url
+      if (response.status === 200) {
+        return { success: true, url: response.url }
+      }
+      return { success: false, msg: "Post Failed" }
+    } catch (err) {
+      console.log({ msg: err.message })
     }
   }
 }
