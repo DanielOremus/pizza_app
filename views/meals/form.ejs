@@ -7,7 +7,7 @@
       <span><%= err.msg%></span>
       <%})%>
     </div>
-    <%}%>
+    <%}%> <%console.log(meal)%>
     <form
       class="form"
       action="/menu/form/validate"
@@ -42,6 +42,17 @@
               id="mealTitle"
               name="title"
               value="<%=meal?.title%>"
+            />
+          </div>
+          <div>
+            <label for="mealDesc">Description:</label>
+            <input
+              placeholder="Description"
+              type="text"
+              class="field"
+              id="mealDesc"
+              name="description"
+              value="<%=meal?.description%>"
             />
           </div>
           <div>

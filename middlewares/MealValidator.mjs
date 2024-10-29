@@ -29,6 +29,7 @@ class MealValidator {
       },
       trim: true,
       escape: true,
+      toInt: true,
     },
   }
 }
