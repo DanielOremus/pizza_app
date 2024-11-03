@@ -30,6 +30,7 @@ class RequestManager {
         body: JSON.stringify({
           title: formData.get("title"),
           price: formData.get("price"),
+          description: formData.get("description"),
         }),
       }
     )
@@ -52,10 +53,11 @@ class RequestManager {
 
       if (response.status === 200) {
         window.location = response.url
+      } else {
+        const data = await response.text()
+        DOMLoader.renderFromString(data)
+        return { success: false, msg: "Post Failed" }
       }
-      const data = await response.text()
-      DOMLoader.renderFromString(data)
-      return { success: false, msg: "Post Failed" }
     } catch (err) {
       console.log({ success: false, msg: err.message })
     }

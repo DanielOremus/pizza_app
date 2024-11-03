@@ -4,6 +4,8 @@ class ValidationController {
   static validateMealFields(req, res) {
     const id = req.params.id
     const mealNewProps = req.body
+    console.log(mealNewProps)
+
     const errors = validationResult(req)
 
     if (!errors.isEmpty()) {

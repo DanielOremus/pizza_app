@@ -1,5 +1,3 @@
-import { checkSchema, validationResult } from "express-validator"
-
 class MealValidator {
   static schema = {
     title: {
