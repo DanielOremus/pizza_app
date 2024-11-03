@@ -38,19 +38,9 @@ class RequestManager {
       const data = await validationResponse.text()
       console.log(data)
 
-      const parser = new DOMParser()
-      const doc = parser.parseFromString(data, "text/html")
-      console.log(doc)
-
-      document.body.innerText = ""
-      document.body.append(...doc.body.children)
+      DOMLoader.renderFromString(data)
     } else {
-      const resData = await RequestManager.postRequest(
-        `/menu/form/${id}`,
-        formData
-      )
-
-      window.location = resData.url
+      await RequestManager.postRequest(`/menu/form/${id}`, formData)
     }
   }
   static async postRequest(url, body) {
@@ -61,11 +51,13 @@ class RequestManager {
       })
 
       if (response.status === 200) {
-        return { success: true, url: response.url }
+        window.location = response.url
       }
+      const data = await response.text()
+      DOMLoader.renderFromString(data)
       return { success: false, msg: "Post Failed" }
     } catch (err) {
-      console.log({ msg: err.message })
+      console.log({ success: false, msg: err.message })
     }
   }
 }
