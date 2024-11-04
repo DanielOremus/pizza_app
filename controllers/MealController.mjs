@@ -1,4 +1,5 @@
-import MealManager from "../models/MealManager.mjs"
+import CategoryManager from "../models/category/CategoryManager.mjs"
+import MealManager from "../models/meal/MealManager.mjs"
 import { removeImageSync } from "../utils/ImageManager.mjs"
 
 class MealController {
@@ -28,8 +29,8 @@ class MealController {
   }
   static async updateMeal(req, res) {
     const id = req.params.id
-    const { title, description, price } = req.body
-    const mealNewProps = { title, description, price }
+    const { title, description, price, category } = req.body
+    const mealNewProps = { title, description, price, category }
     if (req.file) {
       const meal = await MealManager.getById(id)
       removeImageSync(meal, "uploads")
@@ -52,6 +53,7 @@ class MealController {
         title: "Form",
         body: "../meals/form",
         meal: mealNewProps,
+        categories: await CategoryManager.loadList(),
         errors: [{ msg: err.message }],
       })
     }
@@ -81,6 +83,7 @@ class MealController {
       res.render("layouts/main", {
         title: "Form",
         body: "../meals/form",
+        categories: await CategoryManager.loadList(),
         meal: mealObj,
         errors: [],
       })

@@ -14,6 +14,10 @@ class MealValidator {
       trim: true,
       escape: true,
     },
+    description: {
+      trim: true,
+      escape: true,
+    },
     price: {
       isNumeric: {
         errorMessage: "Price must be a number",
@@ -28,6 +32,13 @@ class MealValidator {
       trim: true,
       escape: true,
       toInt: true,
+    },
+    category: {
+      notEmpty: {
+        errorMessage: "Category is required",
+      },
+      trim: true,
+      escape: true,
     },
   }
 }

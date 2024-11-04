@@ -67,6 +67,18 @@
               value="<%=meal?.price%>"
             />
           </div>
+          <div>
+            <label for="mealCategory"
+              >Category:
+              <select name="category" id="mealCategory" class="field">
+                <%for (const category of categories){%>
+                <option value="<%=category._id%>" <%= meal?.category._id?.equals(category._id) ? "selected" : "" %> >
+                  <%=category.title%>
+                </option> 
+                <%}%>
+              </select>
+            </label>
+          </div>
         </div>
       </div>
       <div class="row-2">

@@ -1,7 +1,8 @@
 import { validationResult } from "express-validator"
+import CategoryManager from "../models/category/CategoryManager.mjs"
 
 class ValidationController {
-  static validateMealFields(req, res) {
+  static async validateMealFields(req, res) {
     const id = req.params.id
     const mealNewProps = req.body
     console.log(mealNewProps)
@@ -15,6 +16,7 @@ class ValidationController {
         title: "Form",
         body: "../meals/form",
         meal: mealNewProps,
+        categories: await CategoryManager.loadList(),
         errors: errors.array(),
       })
     }

@@ -31,6 +31,7 @@ class RequestManager {
           title: formData.get("title"),
           price: formData.get("price"),
           description: formData.get("description"),
+          category: formData.get("category"),
         }),
       }
     )
