@@ -3,7 +3,7 @@ import Meal from "./Meal.mjs"
 class MealManager {
   static async loadList(searchParamsObj) {
     try {
-      const query = Meal.find()
+      const query = Meal.find().populate("category")
       if (searchParamsObj.category) {
         query.where("category").equals(searchParamsObj.category)
       }
