@@ -5,10 +5,19 @@ import { removeImageSync } from "../utils/ImageManager.mjs"
 class MealController {
   static async getList(req, res) {
     try {
-      const mealList = await MealManager.loadList()
+      const queryParams = {}
+      for (const key in req.query) {
+        if (req.query[key]) queryParams[key] = req.query[key]
+      }
+      const mealList = await MealManager.loadList(queryParams)
+
+      const categoryList = await CategoryManager.loadList()
+      console.log(categoryList)
+
       res.render("layouts/main", {
         title: "Menu",
         body: "../meals/menu",
+        categoryList,
         mealList,
       })
       // res.json({ success: true, data: mealList })

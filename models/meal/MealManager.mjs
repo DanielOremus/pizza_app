@@ -3,9 +3,15 @@ import Meal from "./Meal.mjs"
 class MealManager {
   static async loadList(searchParamsObj) {
     try {
-      const res = await Meal.find(searchParamsObj || {})
+      const query = Meal.find()
+      if (searchParamsObj.category) {
+        query.where("category").equals(searchParamsObj.category)
+      }
+      if (searchParamsObj.title) {
+        query.where("title").regex(new RegExp(`${searchParamsObj.title}`, "i"))
+      }
 
-      return res
+      return await query.exec()
     } catch (err) {
       return []
     }

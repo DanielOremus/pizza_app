@@ -1,6 +1,31 @@
 <div class="menu-page-wrapper">
   <div class="menu-background"></div>
-  <div class="container">
+  <form action="/menu" class="search-section">
+    <div class="category-selector">
+      <%for (const category of categoryList){%>
+      <button
+        class="category-btn"
+        type="submit"
+        name="category"
+        value="<%=category._id%>"
+      >
+        <%=category.title%>
+      </button>
+      <%}%>
+    </div>
+  </form>
+  <form>
+    <div class="searchbar">
+      <input
+        type="text"
+        class="field"
+        name="title"
+        placeholder="Enter meal title"
+      />
+      <button type="submit" class="search-btn">Search</button>
+    </div>
+  </form>
+  <div class="menu-container">
     <%for (const meal of mealList){%>
     <div class="card">
       <img

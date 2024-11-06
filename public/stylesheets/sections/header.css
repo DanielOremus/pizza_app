@@ -5,6 +5,8 @@
 }
 .header-container {
   display: block;
+  box-shadow: 0 3px 20px 8px black;
+  z-index: 10;
   box-sizing: border-box;
   padding-block: 10px;
   background-color: rgb(46, 46, 46);

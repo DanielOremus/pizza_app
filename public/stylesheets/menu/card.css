@@ -3,6 +3,7 @@
   flex-direction: column;
   text-align: center;
   padding: 50px 30px;
+  padding-top: 25px;
   background-color: rgba(0, 0, 0, 0.642);
   backdrop-filter: blur(5px);
   border-radius: 25px;
