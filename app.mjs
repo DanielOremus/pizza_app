@@ -11,7 +11,7 @@ const app = express()
 const __filename = fileURLToPath(import.meta.url) // get the resolved path to the file
 const __dirname = path.dirname(__filename) // get the name of the directory
 
-connectDB()
+await connectDB()
 app.set("views", path.join(__dirname, "views"))
 app.set("view engine", "ejs")
 
@@ -39,4 +39,5 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500)
   res.render("error")
 })
+
 export default app

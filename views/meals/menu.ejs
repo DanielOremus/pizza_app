@@ -39,9 +39,13 @@
       <span class="card__category"><%=meal.category.title%></span>
 
       <div class="card__actions">
+        <a href="/menu/<%=meal.id%>">
+          <button class="btn">View</button>
+        </a>
         <a href="/menu/form/<%=meal.id%>">
           <button class="btn">Edit</button>
         </a>
+
         <button
           class="btn"
           onclick="RequestManager.deleteRequest('/menu', {id: '<%=meal.id%>'})"

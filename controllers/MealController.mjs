@@ -1,17 +1,18 @@
 import CategoryManager from "../models/category/CategoryManager.mjs"
 import MealManager from "../models/meal/MealManager.mjs"
+import ReviewManager from "../models/review/ReviewManager.mjs"
 import { removeImageSync } from "../utils/ImageManager.mjs"
 
 class MealController {
-  static async getList(req, res) {
+  static async loadList(req, res) {
     try {
       const queryParams = {}
       for (const key in req.query) {
         if (req.query[key]) queryParams[key] = req.query[key]
       }
-      const mealList = await MealManager.loadList(queryParams)
+      const mealList = await MealManager.getList(queryParams)
 
-      const categoryList = await CategoryManager.loadList()
+      const categoryList = await CategoryManager.getList()
       console.log(categoryList)
 
       res.render("layouts/main", {
@@ -26,12 +27,22 @@ class MealController {
       res.status(500).render("error", { error: err })
     }
   }
-  static async getMealDetails(req, res) {
+  static async renderSpecific(req, res) {
     try {
       const meal = await MealManager.getById(req.params.id)
       if (!meal)
         return res.status(404).render("error", { error: "Meal not found" })
-      return res.render("meals/spec_meal", { meal })
+      const reviews = await ReviewManager.getList({ meal: meal._id })
+      console.log("=============")
+
+      console.log(reviews)
+
+      return res.render("layouts/main", {
+        title: meal.title,
+        body: "../meals/spec_meal",
+        meal,
+        reviews,
+      })
     } catch (err) {
       res.status(500).render("error", { error: err })
     }
@@ -47,22 +58,18 @@ class MealController {
     }
     try {
       if (id) {
-        await MealManager.update(id, mealNewProps)
+        await MealManager.updateById(id, mealNewProps)
       } else {
-        await MealManager.add(mealNewProps)
+        await MealManager.create(mealNewProps)
       }
-      console.log(111)
 
       res.redirect("/menu")
     } catch (err) {
-      console.log(mealNewProps)
-      console.log(err.message)
-
       return res.status(400).render("layouts/main", {
         title: "Form",
         body: "../meals/form",
         meal: mealNewProps,
-        categories: await CategoryManager.loadList(),
+        categories: await CategoryManager.getList(),
         errors: [{ msg: err.message }],
       })
     }
@@ -70,13 +77,13 @@ class MealController {
   static async deleteMeal(req, res) {
     try {
       const { id } = req.body
-      const meal = await MealManager.delete(id)
+      const meal = await MealManager.deleteById(id)
       if (!meal)
         return res
           .status(404)
           .render("error", { error: "Delete failed, meal not found" })
       removeImageSync(meal, "uploads")
-      await MealManager.delete(id)
+      // await MealManager.delete(id)
       res.json({ success: true })
     } catch (err) {
       res.status(500).render("error", { error: err })
@@ -92,7 +99,7 @@ class MealController {
       res.render("layouts/main", {
         title: "Form",
         body: "../meals/form",
-        categories: await CategoryManager.loadList(),
+        categories: await CategoryManager.getList(),
         meal: mealObj,
         errors: [],
       })

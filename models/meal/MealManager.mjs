@@ -1,7 +1,7 @@
 import Meal from "./Meal.mjs"
 
 class MealManager {
-  static async loadList(searchParamsObj) {
+  static async getList(searchParamsObj) {
     try {
       const query = Meal.find().populate("category")
       if (searchParamsObj.category) {
@@ -23,14 +23,14 @@ class MealManager {
       console.log(err)
     }
   }
-  static async add(mealObj) {
+  static async create(mealObj) {
     try {
       return await Meal.create(mealObj)
     } catch (err) {
       throw err
     }
   }
-  static async update(id, newProps) {
+  static async updateById(id, newProps) {
     try {
       return await Meal.findByIdAndUpdate(id, newProps, {
         new: true,
@@ -40,7 +40,7 @@ class MealManager {
       throw err
     }
   }
-  static async delete(id) {
+  static async deleteById(id) {
     try {
       return await Meal.findByIdAndDelete(id)
     } catch (err) {

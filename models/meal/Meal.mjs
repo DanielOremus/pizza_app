@@ -12,6 +12,9 @@ const mealSchema = new mongoose.Schema({
   },
   description: {
     type: String,
+    required: [true, "Title is required"],
+    minlength: [10, "Description must be at least 10 chars long"],
+
     trim: true,
   },
   imgSrc: String,
@@ -30,4 +33,4 @@ const mealSchema = new mongoose.Schema({
   },
 })
 
-export default new mongoose.model("Meal", mealSchema)
+export default mongoose.model("Meal", mealSchema)

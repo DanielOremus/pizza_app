@@ -2,7 +2,7 @@ import { Router } from "express"
 import MealController from "../controllers/MealController.mjs"
 import multer from "multer"
 import { v4 as uuidv4 } from "uuid"
-import MealValidator from "../middlewares/MealValidator.mjs"
+import MealValidator from "../validators/MealValidator.mjs"
 import ValidationController from "../controllers/ValidationController.mjs"
 import { checkSchema } from "express-validator"
 
@@ -19,8 +19,9 @@ const upload = multer({ storage })
 
 const router = Router()
 
-router.get("/", MealController.getList)
+router.get("/", MealController.loadList)
 router.get("/form/:id?", MealController.renderForm)
+router.get("/:id", MealController.renderSpecific)
 
 router.post(
   "/form/validate/:id?",

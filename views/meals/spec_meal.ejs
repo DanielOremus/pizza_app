@@ -1,0 +1,42 @@
+<div class="spec-meal-page-wrapper">
+  <div class="background"></div>
+  <div class="main-container">
+    <div class="meal-info">
+      <img
+        src="/<%= meal.imgSrc ? meal.imgSrc : 'no_image.png'%>"
+        alt="Meal Image"
+        class="meal-image"
+      />
+      <div>
+        <div class="main-info">
+          <p class="meal-title">
+            <span>Title:</span>
+            <br />
+            <span><%=meal.title%></span>
+          </p>
+          <p class="meal-price">
+            <span>Price:</span>
+            <br />
+            <span><%=meal.price%>₴</span>
+          </p>
+          <p class="meal-category">
+            <span>Category:</span>
+            <br />
+            <span><%=meal.category.title%></span>
+          </p>
+        </div>
+        <p class="meal-description"><%=meal.description%></p>
+      </div>
+    </div>
+    <div class="reviews-container">
+      <%for (const review of reviews){%>
+      <div class="review">
+        <span class="name"><%=review.critic.fullName%></span>
+        <br />
+        <span class="rate"><%=review.rate%></span>
+        <p class="text"><%=review.text%></p>
+      </div>
+      <%}%>
+    </div>
+  </div>
+</div>
