@@ -1,7 +1,10 @@
+import { validationResult } from "express-validator"
 import CategoryManager from "../models/category/CategoryManager.mjs"
 import MealManager from "../models/meal/MealManager.mjs"
 import ReviewManager from "../models/review/ReviewManager.mjs"
+import UserManager from "../models/user/UserManager.mjs"
 import { removeImageSync } from "../utils/ImageManager.mjs"
+import mongoose from "mongoose"
 
 class MealController {
   static async loadList(req, res) {
@@ -30,6 +33,8 @@ class MealController {
   static async renderSpecific(req, res) {
     try {
       const meal = await MealManager.getById(req.params.id)
+      console.log(`ID ${req.params.id}`)
+
       if (!meal)
         return res.status(404).render("error", { error: "Meal not found" })
       const reviews = await ReviewManager.getList({ meal: meal._id })
@@ -42,6 +47,9 @@ class MealController {
         body: "../meals/spec_meal",
         meal,
         reviews,
+        formData: null,
+        users: await UserManager.getList(),
+        errors: [],
       })
     } catch (err) {
       res.status(500).render("error", { error: err })
@@ -84,6 +92,7 @@ class MealController {
           .render("error", { error: "Delete failed, meal not found" })
       removeImageSync(meal, "uploads")
       // await MealManager.delete(id)
+      await ReviewManager.deleteMany({ meal: meal._id })
       res.json({ success: true })
     } catch (err) {
       res.status(500).render("error", { error: err })
@@ -103,6 +112,61 @@ class MealController {
         meal: mealObj,
         errors: [],
       })
+    } catch (err) {
+      res.status(500).render("error", { error: err })
+    }
+  }
+  static async addReview(req, res) {
+    // const id = req.body.mealId
+    const id = req.params.id
+    console.log(id)
+
+    try {
+      const meal = await MealManager.getById(id)
+      if (!meal) {
+        return res.status(404).json({ success: false, msg: "Meal not found" })
+      }
+      const reviews = await ReviewManager.getList({ meal: meal._id })
+      const errors = validationResult(req)
+
+      const { user, rate, text } = req.body
+      if (!errors.isEmpty()) {
+        return res.status(400).render("layouts/main", {
+          title: meal.title,
+          body: "../meals/spec_meal",
+          meal,
+          formData: {
+            user,
+            rate,
+            text,
+          },
+          reviews,
+          users: await UserManager.getList(),
+          errors: errors.array(),
+        })
+      }
+      await ReviewManager.create({
+        user: user ? user : null,
+        rate,
+        text,
+        meal: meal._id,
+      })
+
+      res.redirect(`/menu/${meal.id}`)
+    } catch (error) {
+      res.status(500).json({ success: false, msg: error.message })
+    }
+  }
+
+  static async deleteReview(req, res) {
+    try {
+      const { id } = req.body
+      const review = await ReviewManager.deleteById(id)
+      if (!review)
+        return res
+          .status(404)
+          .render("error", { error: "Delete failed, meal not found" })
+      res.json({ success: true })
     } catch (err) {
       res.status(500).render("error", { error: err })
     }

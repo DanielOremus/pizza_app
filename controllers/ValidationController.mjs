@@ -18,7 +18,7 @@ class ValidationController {
         errors: errors.array(),
       })
     }
-    return res.send("ok")
+    return res.json({ success: true })
   }
 }
 

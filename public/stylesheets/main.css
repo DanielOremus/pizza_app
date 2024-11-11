@@ -26,6 +26,28 @@ main {
     background-color: rgb(217, 141, 0);
   }
 }
+.rate-white {
+  color: #ebebeb;
+}
+.rate-yellow {
+  color: #ffea4e;
+}
+.field {
+  outline: none;
+  border: none;
+  box-sizing: border-box;
+  font-size: 1.4rem;
+  font-family: "Arima Madurai";
+  font-weight: 500;
+  padding: 0.5rem 1.3rem;
+  width: 100%;
+  border-radius: 10px;
+  background-color: rgba(150, 150, 150, 0.485);
+  color: rgb(208, 208, 208);
+}
+select.field > option {
+  color: black;
+}
 .orange {
   color: rgb(241, 120, 0);
 }

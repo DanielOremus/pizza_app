@@ -1,5 +1,8 @@
 class RequestManager {
   static async deleteRequest(path, body) {
+    console.log(path)
+    console.log(body)
+
     const response = await fetch(path, {
       method: "DELETE",
       headers: {
@@ -61,6 +64,42 @@ class RequestManager {
       }
     } catch (err) {
       console.log({ success: false, msg: err.message })
+    }
+  }
+  static async onAddReview(e) {
+    e.preventDefault()
+    const formEl = e.target
+
+    const formData = new FormData(formEl)
+
+    const mealId = formEl.getAttribute("data-mealId")
+    console.log("==========")
+
+    console.log(mealId)
+
+    const url = formEl.getAttribute("action")
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          user: formData.get("user"),
+          rate: formData.get("rate"),
+          text: formData.get("text"),
+          mealId,
+        }),
+      })
+
+      const data = await response.json()
+      if (data.success) {
+        window.location.reload(true)
+      } else {
+        console.log(data)
+      }
+    } catch (error) {
+      console.log({ success: false, msg: error.message })
     }
   }
 }

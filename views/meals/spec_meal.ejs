@@ -28,13 +28,118 @@
         <p class="meal-description"><%=meal.description%></p>
       </div>
     </div>
+    <form
+      action="/menu/<%=meal.id%>/reviews/add"
+      method="post"
+      data-mealId="<%=meal.id%>"
+      class="review-form"
+    >
+      <div>
+        <label for="user">User:</label>
+        <br />
+        <select name="user" id="user" class="field">
+          <option value="" selected>Select User</option>
+          <%for (const user of users){%>
+          <option value="<%=user._id%>" <%= user.id===formData?.user ? 'selected' : ''%>><%=user.fullName%></option>
+          <%}%>
+        </select>
+        <br />
+        <% const userErr = errors.find(err=>err.path==='user')%> <%
+        if(userErr){%>
+        <div class="user-error-container">* <%=userErr.msg%></div>
+        <%}%>
+      </div>
+      <div>
+        <div class="rating">
+          <input
+            type="radio"
+            name="rate"
+            value="5"
+            class="rating-radio"
+            id="star-5"
+          />
+          <label for="star-5">
+            <i class="fa-solid fa-star"></i>
+          </label>
+          <input
+            type="radio"
+            name="rate"
+            value="4"
+            class="rating-radio"
+            id="star-4"
+          />
+          <label for="star-4">
+            <i class="fa-solid fa-star"></i>
+          </label>
+          <input
+            type="radio"
+            name="rate"
+            value="3"
+            class="rating-radio"
+            id="star-3"
+          />
+          <label for="star-3">
+            <i class="fa-solid fa-star"></i>
+          </label>
+          <input
+            type="radio"
+            name="rate"
+            value="2"
+            class="rating-radio"
+            id="star-2"
+          />
+          <label for="star-2">
+            <i class="fa-solid fa-star"></i>
+          </label>
+          <input
+            type="radio"
+            name="rate"
+            value="1"
+            class="rating-radio"
+            id="star-1"
+            checked
+          />
+          <label for="star-1">
+            <i class="fa-solid fa-star"></i>
+          </label>
+        </div>
+        <% const rateErr = errors.find(err=>err.path==='rate')%> <%
+        if(rateErr){%>
+        <div class="rate-error-container">* <%=rateErr.msg%></div>
+        <%}%>
+      </div>
+      <div>
+        <label for="comment">Comment:</label>
+        <br />
+        <textarea
+          name="text"
+          placeholder="Your comment"
+          id="comment"
+          class="field"
+        ><%=formData?.text%></textarea>
+        <br />
+        <% const commentErr = errors.find(err=>err.path==='text')%> <%
+        if(commentErr){%>
+        <div class="comment-error-container">* <%=commentErr.msg%></div>
+        <%}%>
+      </div>
+      <button class="btn" type="submit">Comment</button>
+    </form>
     <div class="reviews-container">
       <%for (const review of reviews){%>
       <div class="review">
-        <span class="name"><%=review.critic.fullName%></span>
+        <span class="name"><%=review.user.fullName%></span>
         <br />
-        <span class="rate"><%=review.rate%></span>
+        <div class="rating">
+          <% for (let i = 1; i<=5; i++){%>
+          <span class="<%= i<=review.rate ? 'rate-yellow' : 'rate-white'%>">
+            <i class="fa-solid fa-star"></i>
+          </span>
+          <%}%>
+        </div>
         <p class="text"><%=review.text%></p>
+        <br>
+        <button class="btn" onclick="RequestManager.deleteRequest('<%=meal.id%>/reviews', {id: '<%=review.id%>'})">Delete</button>
       </div>
       <%}%>
     </div>

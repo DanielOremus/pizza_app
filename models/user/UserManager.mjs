@@ -15,9 +15,9 @@ class UserManager {
       throw error
     }
   }
-  static async create(criticProps) {
+  static async create(userProps) {
     try {
-      return await User.create(criticProps)
+      return await User.create(userProps)
     } catch (error) {
       throw error
     }

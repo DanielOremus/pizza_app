@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose"
 
 const reviewSchema = new Schema({
-  critic: {
+  user: {
     type: Schema.Types.ObjectId,
     required: [true, "User must be attached"],
     ref: "User",
@@ -16,12 +16,16 @@ const reviewSchema = new Schema({
     type: String,
     trim: true,
     required: [true, "Review text is required"],
-    minLength: [10, "Review text must contain at leaste 10 chars"],
+    minLength: [10, "Review text must contain at least 10 chars"],
   },
   meal: {
     type: Schema.Types.ObjectId,
     required: [true, "Meal must be attached"],
     ref: "Meal",
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now(),
   },
 })
 

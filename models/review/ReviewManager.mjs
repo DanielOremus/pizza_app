@@ -3,9 +3,7 @@ import Review from "./Review.mjs"
 class ReviewManager {
   static async getList(searchParams = {}) {
     try {
-      const reviews = await CriticReview.find().populate("user")
-
-      console.log(reviews)
+      const reviews = await Review.find(searchParams).populate("user")
 
       return reviews
     } catch (error) {
@@ -39,6 +37,13 @@ class ReviewManager {
   static async deleteById(id) {
     try {
       return await Review.findByIdAndDelete(id)
+    } catch (error) {
+      throw error
+    }
+  }
+  static async deleteMany(params) {
+    try {
+      return await Review.deleteMany(params)
     } catch (error) {
       throw error
     }

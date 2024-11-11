@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from "uuid"
 import MealValidator from "../validators/MealValidator.mjs"
 import ValidationController from "../controllers/ValidationController.mjs"
 import { checkSchema } from "express-validator"
+import ReviewValidator from "../validators/ReviewValidator.mjs"
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -30,6 +31,13 @@ router.post(
 )
 router.post("/form/:id?", upload.single("image"), MealController.updateMeal)
 
+router.post(
+  "/:id/reviews/add",
+  checkSchema(ReviewValidator.schema),
+  MealController.addReview
+)
 router.delete("/", MealController.deleteMeal)
+
+router.delete("/:id/reviews", MealController.deleteReview)
 
 export default router

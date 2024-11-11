@@ -39,8 +39,6 @@ class MealValidator {
         },
         errorMessage: "Price must be at least 1₴",
       },
-      trim: true,
-      escape: true,
       toInt: true,
     },
     category: {

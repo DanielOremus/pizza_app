@@ -9,10 +9,6 @@ const userSchema = new Schema({
     type: String,
     required: [true, "Last name is required"],
   },
-  createdAt: {
-    type: Date,
-    default: Date.now(),
-  },
 })
 
 userSchema.virtual("fullName").get(function () {
