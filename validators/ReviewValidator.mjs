@@ -33,7 +33,6 @@ class ReviewValidator {
         errorMessage: "Comment must be at least 10 chars long",
       },
       trim: true,
-      escape: true,
     },
   }
 }
