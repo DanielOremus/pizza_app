@@ -1,8 +1,10 @@
 import { Router } from "express"
-import MainController from "../controllers/MainController.mjs"
+import mainRoutes from "./mainRoutes.mjs"
+import mealsRouter from "./meal.mjs"
 
 const router = Router()
-router.get("/", MainController.renderHomePage)
-router.get("/about", MainController.renderAboutPage)
+
+router.use("/", mainRoutes)
+router.use("/menu", mealsRouter)
 
 export default router

@@ -1,22 +1,10 @@
 import { Router } from "express"
 import MealController from "../controllers/MealController.mjs"
-import multer from "multer"
-import { v4 as uuidv4 } from "uuid"
 import MealValidator from "../validators/MealValidator.mjs"
 import ValidationController from "../controllers/ValidationController.mjs"
 import { checkSchema } from "express-validator"
 import ReviewValidator from "../validators/ReviewValidator.mjs"
-
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "uploads")
-  },
-  filename: function (req, file, cb) {
-    const filename = `${uuidv4()}-${file.originalname}`
-    cb(null, filename)
-  },
-})
-const upload = multer({ storage })
+import upload from "../config/multer.mjs"
 
 const router = Router()
 
