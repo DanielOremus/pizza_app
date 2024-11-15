@@ -1,9 +1,15 @@
 import Meal from "./Meal.mjs"
+import MongooseCRUDManager from "../MoongooseCRUDManager.mjs"
 
-class MealManager {
-  static async getList(searchParamsObj) {
+class MealManager extends MongooseCRUDManager {
+  async getList(
+    filters = {},
+    projection = null,
+    options = null,
+    populateFields = []
+  ) {
     try {
-      const query = Meal.find().populate("category")
+      const query = super.getList(filters, null, null, ["category"])
       if (searchParamsObj.category) {
         query.where("category").equals(searchParamsObj.category)
       }
@@ -16,37 +22,13 @@ class MealManager {
       return []
     }
   }
-  static async getById(id) {
+  async getById(id, projection = null, populateFields = []) {
     try {
-      return await Meal.findById(id).populate("category")
-    } catch (err) {
-      console.log(err)
-    }
-  }
-  static async create(mealObj) {
-    try {
-      return await Meal.create(mealObj)
-    } catch (err) {
-      throw err
-    }
-  }
-  static async updateById(id, newProps) {
-    try {
-      return await Meal.findByIdAndUpdate(id, newProps, {
-        new: true,
-        runValidators: true,
-      })
-    } catch (err) {
-      throw err
-    }
-  }
-  static async deleteById(id) {
-    try {
-      return await Meal.findByIdAndDelete(id)
+      return await super.getById(id, null, ["category"])
     } catch (err) {
       console.log(err)
     }
   }
 }
 
-export default MealManager
+export default new MealManager(Meal)
