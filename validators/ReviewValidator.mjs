@@ -1,12 +1,5 @@
 class ReviewValidator {
   static schema = {
-    user: {
-      notEmpty: {
-        errorMessage: "User must me attached",
-      },
-      trim: true,
-      escape: true,
-    },
     rate: {
       isNumeric: {
         errorMessage: "Rate must be a number",

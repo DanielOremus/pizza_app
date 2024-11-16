@@ -49,7 +49,7 @@
 
         <button
           class="btn"
-          onclick="RequestManager.deleteRequest('/menu', {id: '<%=meal.id%>'})"
+          onclick="RequestManager.deleteRequest('/menu', {id: '<%=meal.id%>'}, function(){window.location.reload()})"
         >
           Delete
         </button>

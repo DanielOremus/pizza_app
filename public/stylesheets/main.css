@@ -18,7 +18,7 @@ main {
   border: none;
   color: white;
   background-color: orange;
-
+  outline: none;
   transition: background-color 0.2s ease;
 
   &:hover {

@@ -7,6 +7,12 @@ export function ensureManager(req, res, next) {
   res.status(403).json({ success: false, msg: "Forbidden" })
 }
 
-// export function ensureOwner(req,res,next){
-//   if(req.isAuthenticated() && req.user.id===req.body.accountId)
-// }
+export function ensureAccountOwner(req, res, next) {
+  if (req.isAuthenticated() && req.user.id === req.body.userId) return next()
+  res.status(403).json({ success: false, msg: "Forbidden" })
+}
+
+export function ensureNotAuthenticated(req, res, next) {
+  if (!req.isAuthenticated()) return next()
+  res.redirect("/")
+}

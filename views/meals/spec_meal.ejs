@@ -35,21 +35,10 @@
       class="review-form"
     >
       <div>
-        <label for="user">User:</label>
-        <br />
-        <select name="user" id="user" class="field">
-          <option value="" selected>Select User</option>
-          <%for (const user of users){%>
-          <option value="<%=user._id%>" <%= user.id===formData?.user ? 'selected' : ''%>><%=user.fullName%></option>
-          <%}%>
-        </select>
-        <br />
-        <% const userErr = errors.find(err=>err.path==='user')%> <%
-        if(userErr){%>
-        <div class="user-error-container">* <%=userErr.msg%></div>
-        <%}%>
-      </div>
-      <div>
+        <label class="comment-card-title">
+          Want to share your experience?
+        </label>
+
         <div class="rating">
           <input
             type="radio"
@@ -116,7 +105,9 @@
           placeholder="Your comment"
           id="comment"
           class="field"
-        ><%=formData?.text%></textarea>
+        >
+<%=formData?.text%></textarea
+        >
         <br />
         <% const commentErr = errors.find(err=>err.path==='text')%> <%
         if(commentErr){%>
@@ -128,6 +119,7 @@
     <div class="reviews-container">
       <%for (const review of reviews){%>
       <div class="review">
+        <%console.log(review.user)%>
         <span class="name"><%=review.user.fullName%></span>
         <br />
         <div class="rating">
@@ -138,8 +130,16 @@
           <%}%>
         </div>
         <p class="text"><%=review.text%></p>
-        <br>
-        <button class="btn" onclick="RequestManager.deleteRequest('<%=meal.id%>/reviews', {id: '<%=review.id%>'})">Delete</button>
+        <%if(review.user.id===user?.id){%>
+        <br />
+
+        <button
+          class="btn"
+          onclick="RequestManager.deleteRequest('<%=meal.id%>/reviews', {id: '<%=review.id%>', userId: '<%=review.user.id%>'}, function(){window.location.reload()})"
+        >
+          Delete
+        </button>
+        <%}%>
       </div>
       <%}%>
     </div>

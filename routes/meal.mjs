@@ -5,7 +5,11 @@ import ValidationController from "../controllers/ValidationController.mjs"
 import { checkSchema } from "express-validator"
 import ReviewValidator from "../validators/ReviewValidator.mjs"
 import upload from "../config/multer.mjs"
-import { ensureAuthenticated, ensureManager } from "../middlewares/auth.mjs"
+import {
+  ensureAuthenticated,
+  ensureManager,
+  ensureAccountOwner,
+} from "../middlewares/auth.mjs"
 
 const router = Router()
 
@@ -44,6 +48,11 @@ router.delete(
   MealController.deleteMeal
 )
 
-router.delete("/:id/reviews", ensureAuthenticated, MealController.deleteReview)
+router.delete(
+  "/:id/reviews",
+  ensureAuthenticated,
+  ensureAccountOwner,
+  MealController.deleteReview
+)
 
 export default router

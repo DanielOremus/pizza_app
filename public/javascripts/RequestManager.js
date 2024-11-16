@@ -1,6 +1,5 @@
 class RequestManager {
-  static async deleteRequest(path, body) {
-    console.log(path)
+  static async deleteRequest(path, body, callback) {
     console.log(body)
 
     const response = await fetch(path, {
@@ -12,9 +11,11 @@ class RequestManager {
     })
 
     const data = await response.json()
-
-    window.location.reload()
-
+    if (data.success) {
+      callback()
+    } else {
+      console.log(data)
+    }
     return data
   }
   static async onFormSubmit(e) {

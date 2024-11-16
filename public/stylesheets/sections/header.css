@@ -69,17 +69,19 @@
       .logout-btn {
         outline: none;
         background-color: transparent;
-        cursor: pointer;
+
         color: rgb(167, 2, 2);
         font-size: 30px;
-        transition: color 0.1s ease;
-        &:hover {
+        i {
+          transition: color 0.1s ease;
+          vertical-align: middle;
+          cursor: pointer;
+        }
+        i:hover {
           color: rgb(124, 0, 0);
         }
       }
-      i {
-        vertical-align: middle;
-      }
+
       .add-meal-btn {
         min-width: 200px;
       }

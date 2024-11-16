@@ -28,6 +28,8 @@ const userSchema = new Schema({
     default: new mongoose.Types.ObjectId("67389b5b108ca03b51ba2d16"),
   },
 })
+userSchema.set("toObject", { virtuals: true })
+userSchema.set("toJSON", { virtuals: true })
 
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {

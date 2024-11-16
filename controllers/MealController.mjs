@@ -4,6 +4,7 @@ import MealManager from "../models/meal/MealManager.mjs"
 import ReviewManager from "../models/review/ReviewManager.mjs"
 import UserManager from "../models/user/UserManager.mjs"
 import { removeImageSync } from "../utils/ImageManager.mjs"
+import User from "../models/user/User.mjs"
 
 class MealController {
   static async loadList(req, res) {
@@ -42,7 +43,12 @@ class MealController {
         { meal: meal._id },
         { meal: 0 },
         { sort: { createdAt: -1 } },
-        ["user"]
+        [
+          {
+            fieldForPopulation: "user",
+            requiredFieldsFromTargetObj: "firstName lastName fullName",
+          },
+        ]
       )
 
       return res.render("layouts/main", {
@@ -52,7 +58,6 @@ class MealController {
         reviews,
         user: req.user,
         formData: null,
-        users: await UserManager.getList(),
         errors: [],
       })
     } catch (err) {
@@ -127,25 +132,37 @@ class MealController {
   static async addReview(req, res) {
     // const id = req.body.mealId
     const id = req.params.id
-    console.log(id)
+
+    const { rate, text } = req.body
+    const user = req.user
 
     try {
       const meal = await MealManager.getById(id)
       if (!meal) {
         return res.status(404).json({ success: false, msg: "Meal not found" })
       }
-      const reviews = await ReviewManager.getList({ meal: meal._id })
+      const reviews = await ReviewManager.getList(
+        { meal: meal._id },
+        { meal: 0 },
+        { sort: { createdAt: -1 } },
+        [
+          {
+            fieldForPopulation: "user",
+            requiredFieldsFromTargetObj: "firstName lastName fullName",
+          },
+        ]
+      )
       const errors = validationResult(req)
 
-      const { user, rate, text } = req.body
+      console.log(errors)
+
       if (!errors.isEmpty()) {
         return res.status(400).render("layouts/main", {
           title: meal.title,
           body: "../meals/spec_meal",
           meal,
-          user: req.user,
+          user,
           formData: {
-            user,
             rate,
             text,
           },
@@ -155,7 +172,7 @@ class MealController {
         })
       }
       await ReviewManager.create({
-        user: user ? user : null,
+        user: user._id,
         rate,
         text,
         meal: meal._id,
