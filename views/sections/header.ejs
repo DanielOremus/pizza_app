@@ -16,7 +16,7 @@
         <div class="user-div">
           <%if(user){%>
           <span><%=user.fullName%></span>
-          <a href="auth/logout">
+          <a href="/auth/logout">
             <button class="logout-btn">
               <i class="fa-solid fa-right-from-bracket"></i>
             </button>
@@ -26,7 +26,7 @@
             <button class="btn add-meal-btn">Add Meal</button>
           </a>
           <%} } else{%>
-          <a href="auth/login">
+          <a href="/auth/login">
             <button class="btn auth-btn">Become our Guest</button>
           </a>
           <%}%>
