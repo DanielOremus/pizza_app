@@ -34,17 +34,62 @@
       }
     }
     button {
+      border: none;
       font-family: "Arima Madurai";
       font-weight: 500;
       white-space: nowrap;
       font-size: 22px;
       font-weight: 600;
       border-radius: 20px;
-      width: 210px;
+    }
+    .auth-btn {
+      background-color: rgb(255, 153, 0);
+
+      min-width: 200px;
+      transition: transform 0.4s ease;
+      cursor: pointer;
+      box-sizing: border-box;
+      padding: 5px 1.5rem;
+      box-shadow: 0 0 20px 0.5px rgb(255, 189, 21);
+
+      &:hover {
+        transform: scale(1.04);
+      }
+    }
+    .user-div {
+      /* display: flex; */
+      span {
+        color: white;
+        font-family: "Arima Madurai";
+        font-size: 22px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-right: 10px;
+      }
+      .logout-btn {
+        outline: none;
+        background-color: transparent;
+        cursor: pointer;
+        color: rgb(167, 2, 2);
+        font-size: 30px;
+        transition: color 0.1s ease;
+        &:hover {
+          color: rgb(124, 0, 0);
+        }
+      }
+      i {
+        vertical-align: middle;
+      }
+      .add-meal-btn {
+        min-width: 200px;
+      }
     }
   }
-  .nav-items > :nth-child(2) {
-    flex-basis: 400px;
+
+  .nav-items > :nth-child(n) {
+    flex-basis: 33%;
+    text-align: center;
+    align-items: center;
   }
 }
 .links-container {

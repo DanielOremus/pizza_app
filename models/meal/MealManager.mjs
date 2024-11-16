@@ -1,5 +1,5 @@
 import Meal from "./Meal.mjs"
-import MongooseCRUDManager from "../MoongooseCRUDManager.mjs"
+import MongooseCRUDManager from "../MongooseCRUDManager.mjs"
 
 class MealManager extends MongooseCRUDManager {
   async getList(
@@ -9,22 +9,26 @@ class MealManager extends MongooseCRUDManager {
     populateFields = []
   ) {
     try {
-      const query = super.getList(filters, null, null, ["category"])
-      if (searchParamsObj.category) {
-        query.where("category").equals(searchParamsObj.category)
+      if (filters.title) {
+        filters.title = new RegExp(`${filters.title}`, "i")
       }
-      if (searchParamsObj.title) {
-        query.where("title").regex(new RegExp(`${searchParamsObj.title}`, "i"))
-      }
-
-      return await query.exec()
+      const list = await super.getList(
+        filters,
+        projection,
+        options,
+        populateFields
+      )
+      return list
     } catch (err) {
       return []
     }
   }
-  async getById(id, projection = null, populateFields = []) {
+  async getById(id, projection = {}, populateFields = []) {
     try {
-      return await super.getById(id, null, ["category"])
+      const meal = await super.getById(id, projection, populateFields)
+      console.log(meal)
+
+      return meal
     } catch (err) {
       console.log(err)
     }

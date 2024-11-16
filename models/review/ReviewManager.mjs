@@ -1,53 +1,29 @@
 import Review from "./Review.mjs"
+import MongooseCRUDManager from "../MongooseCRUDManager.mjs"
 
-class ReviewManager {
-  static async getList(searchParams = {}) {
+class ReviewManager extends MongooseCRUDManager {
+  async getList(
+    filters = {},
+    projection = {},
+    options = {},
+    populateFields = []
+  ) {
     try {
-      const reviews = await Review.find(searchParams).populate("user")
-
-      return reviews
+      return await super.getList(filters, projection, options, populateFields)
     } catch (error) {
       return []
     }
   }
-  static async getById(id) {
+  async getById(id, projection = {}, populateFields = []) {
     try {
-      return await Review.findById(id)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-  static async create(reviewProps) {
-    try {
-      return await Review.create(reviewProps)
-    } catch (error) {
-      throw error
-    }
-  }
-  static async updateById(id, props) {
-    try {
-      return await Review.findByIdAndUpdate(id, props, {
-        new: true,
-        runValidators: true,
-      })
-    } catch (error) {
-      throw error
-    }
-  }
-  static async deleteById(id) {
-    try {
-      return await Review.findByIdAndDelete(id)
-    } catch (error) {
-      throw error
-    }
-  }
-  static async deleteMany(params) {
-    try {
-      return await Review.deleteMany(params)
-    } catch (error) {
-      throw error
+      const meal = await super.getById(id, projection, populateFields)
+      console.log(meal)
+
+      return meal
+    } catch (err) {
+      console.log(err)
     }
   }
 }
 
-export default ReviewManager
+export default new ReviewManager(Review)

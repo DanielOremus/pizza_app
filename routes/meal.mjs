@@ -5,11 +5,17 @@ import ValidationController from "../controllers/ValidationController.mjs"
 import { checkSchema } from "express-validator"
 import ReviewValidator from "../validators/ReviewValidator.mjs"
 import upload from "../config/multer.mjs"
+import { ensureAuthenticated, ensureManager } from "../middlewares/auth.mjs"
 
 const router = Router()
 
 router.get("/", MealController.loadList)
-router.get("/form/:id?", MealController.renderForm)
+router.get(
+  "/form/:id?",
+  ensureAuthenticated,
+  ensureManager,
+  MealController.renderForm
+)
 router.get("/:id", MealController.renderSpecific)
 
 router.post(
@@ -17,15 +23,27 @@ router.post(
   checkSchema(MealValidator.schema),
   ValidationController.validateMealFields
 )
-router.post("/form/:id?", upload.single("image"), MealController.updateMeal)
+router.post(
+  "/form/:id?",
+  upload.single("image"),
+  ensureAuthenticated,
+  ensureManager,
+  MealController.updateMeal
+)
 
 router.post(
   "/:id/reviews/add",
+  ensureAuthenticated,
   checkSchema(ReviewValidator.schema),
   MealController.addReview
 )
-router.delete("/", MealController.deleteMeal)
+router.delete(
+  "/",
+  ensureAuthenticated,
+  ensureManager,
+  MealController.deleteMeal
+)
 
-router.delete("/:id/reviews", MealController.deleteReview)
+router.delete("/:id/reviews", ensureAuthenticated, MealController.deleteReview)
 
 export default router

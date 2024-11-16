@@ -11,10 +11,26 @@
           <li><a href="/menu">Menu</a></li>
         </ul>
       </li>
+
       <li>
-        <a href="/menu/form">
-          <button class="btn">Add Meal</button>
-        </a>
+        <div class="user-div">
+          <%if(user){%>
+          <span><%=user.fullName%></span>
+          <a href="auth/logout">
+            <button class="logout-btn">
+              <i class="fa-solid fa-right-from-bracket"></i>
+            </button>
+          </a>
+          <%if(user.role.title==='Manager'){%>
+          <a href="/menu/form">
+            <button class="btn add-meal-btn">Add Meal</button>
+          </a>
+          <%} } else{%>
+          <a href="auth/login">
+            <button class="btn auth-btn">Become our Guest</button>
+          </a>
+          <%}%>
+        </div>
       </li>
     </ul>
   </nav>

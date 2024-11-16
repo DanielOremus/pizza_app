@@ -42,6 +42,7 @@
         <a href="/menu/<%=meal.id%>">
           <button class="btn">View</button>
         </a>
+        <%if(user?.role.title==='Manager'){%>
         <a href="/menu/form/<%=meal.id%>">
           <button class="btn">Edit</button>
         </a>
@@ -52,6 +53,7 @@
         >
           Delete
         </button>
+        <%}%>
       </div>
     </div>
     <%}%>

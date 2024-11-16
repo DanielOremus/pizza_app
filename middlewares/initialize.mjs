@@ -1,6 +1,8 @@
 import express from "express"
 import path from "path"
 import cookieParser from "cookie-parser"
+import passport from "../config/passport.mjs"
+import sessionConfig from "../config/session.mjs"
 import logger from "morgan"
 import mongooseSanitize from "express-mongo-sanitize"
 import { fileURLToPath } from "url"
@@ -20,4 +22,10 @@ export default (app) => {
 
   app.use(express.static(path.join(__dirname, "../public")))
   app.use(express.static(path.join(__dirname, "../uploads")))
+
+  app.use(sessionConfig)
+  app.use(passport.initialize())
+  app.use(passport.session())
+
+  // app.use(flash())
 }

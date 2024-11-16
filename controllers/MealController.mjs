@@ -4,25 +4,26 @@ import MealManager from "../models/meal/MealManager.mjs"
 import ReviewManager from "../models/review/ReviewManager.mjs"
 import UserManager from "../models/user/UserManager.mjs"
 import { removeImageSync } from "../utils/ImageManager.mjs"
-import mongoose from "mongoose"
 
 class MealController {
   static async loadList(req, res) {
     try {
       const queryParams = {}
+
       for (const key in req.query) {
         if (req.query[key]) queryParams[key] = req.query[key]
       }
-      const mealList = await MealManager.getList(queryParams)
+      const mealList = await MealManager.getList(queryParams, {}, {}, [
+        "category",
+      ])
 
       const categoryList = await CategoryManager.getList()
-      console.log(categoryList)
-
       res.render("layouts/main", {
         title: "Menu",
         body: "../meals/menu",
         categoryList,
         mealList,
+        user: req.user,
       })
       // res.json({ success: true, data: mealList })
     } catch (err) {
@@ -32,21 +33,24 @@ class MealController {
   }
   static async renderSpecific(req, res) {
     try {
-      const meal = await MealManager.getById(req.params.id)
-      console.log(`ID ${req.params.id}`)
+      const meal = await MealManager.getById(req.params.id, {}, ["category"])
 
       if (!meal)
         return res.status(404).render("error", { error: "Meal not found" })
-      const reviews = await ReviewManager.getList({ meal: meal._id })
-      console.log("=============")
 
-      console.log(reviews)
+      const reviews = await ReviewManager.getList(
+        { meal: meal._id },
+        { meal: 0 },
+        { sort: { createdAt: -1 } },
+        ["user"]
+      )
 
       return res.render("layouts/main", {
         title: meal.title,
         body: "../meals/spec_meal",
         meal,
         reviews,
+        user: req.user,
         formData: null,
         users: await UserManager.getList(),
         errors: [],
@@ -77,6 +81,7 @@ class MealController {
         title: "Form",
         body: "../meals/form",
         meal: mealNewProps,
+        user: req.user,
         categories: await CategoryManager.getList(),
         errors: [{ msg: err.message }],
       })
@@ -100,6 +105,8 @@ class MealController {
   }
   static async renderForm(req, res) {
     try {
+      console.log(req.user)
+
       const { id } = req.params
       let mealObj = null
       if (id) {
@@ -108,6 +115,7 @@ class MealController {
       res.render("layouts/main", {
         title: "Form",
         body: "../meals/form",
+        user: req.user,
         categories: await CategoryManager.getList(),
         meal: mealObj,
         errors: [],
@@ -135,6 +143,7 @@ class MealController {
           title: meal.title,
           body: "../meals/spec_meal",
           meal,
+          user: req.user,
           formData: {
             user,
             rate,

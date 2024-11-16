@@ -1,13 +1,19 @@
+import MongooseCRUDManager from "../MongooseCRUDManager.mjs"
 import Category from "./Category.mjs"
 
-class CategoryManager {
-  static async getList() {
+class CategoryManager extends MongooseCRUDManager {
+  async getList(
+    filters = {},
+    projection = {},
+    options = {},
+    populateFields = []
+  ) {
     try {
-      return await Category.find()
+      return await super.getList(filters, projection, options, populateFields)
     } catch (error) {
-      console.log(error)
+      return []
     }
   }
 }
 
-export default CategoryManager
+export default new CategoryManager(Category)

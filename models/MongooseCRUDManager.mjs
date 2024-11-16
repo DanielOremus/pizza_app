@@ -3,13 +3,13 @@ class MongooseCRUDManager {
     this.model = model
   }
   async getList(
-    filter = {},
-    projection = null,
-    options = null,
+    filters = {},
+    projection = {},
+    options = {},
     populateFields = []
   ) {
     try {
-      const query = this.model.find(filter, projection, options)
+      const query = this.model.find(filters, projection, options)
 
       for (const field of populateFields) {
         if (typeof field === "string") {
@@ -27,17 +27,17 @@ class MongooseCRUDManager {
           )
         }
       }
+
       return await query.exec()
     } catch (error) {
       throw new Error("Error getting data: " + error.message)
     }
   }
-  async getById(id, projection = null, populateFields = []) {
+  async getById(id, projection = {}, populateFields = []) {
     try {
       const query = this.model.findById(id, projection)
-
       for (const field of populateFields) {
-        if (typeof field === " string") {
+        if (typeof field === "string") {
           query.populate(field)
           continue
         }
@@ -57,9 +57,34 @@ class MongooseCRUDManager {
       throw new Error("Error getting item by id: " + error.message)
     }
   }
+  async getOne(filters, projection = {}, populateFields = []) {
+    try {
+      const query = this.model.findOne(filters, projection)
+      for (const field of populateFields) {
+        if (typeof field === "string") {
+          query.populate(field)
+          continue
+        }
+        if (
+          typeof field === "object" &&
+          field.fieldForPopulation &&
+          field.requiredFieldsFromTargetObj
+        ) {
+          query.populate(
+            field.fieldForPopulation,
+            field.requiredFieldsFromTargetObj
+          )
+        }
+      }
+      return await query.exec()
+    } catch (error) {
+      throw new Error("Error getting item by filters: " + error.message)
+    }
+  }
   async create(itemObj) {
     try {
-      return await this.model.create(itemObj)
+      const item = new this.model(itemObj)
+      return await item.save()
     } catch (error) {
       throw new Error("Error creating item: " + error.message)
     }
