@@ -17,8 +17,6 @@ class ReviewManager extends MongooseCRUDManager {
   async getById(id, projection = {}, populateFields = []) {
     try {
       const meal = await super.getById(id, projection, populateFields)
-      console.log(meal)
-
       return meal
     } catch (err) {
       console.log(err)

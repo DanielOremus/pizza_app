@@ -96,14 +96,21 @@ class MongooseCRUDManager {
         runValidators: true,
       })
     } catch (error) {
-      throw new Error("Error updating item: " + error.message)
+      throw new Error("Error updating item by id: " + error.message)
     }
   }
   async deleteById(id) {
     try {
       return await this.model.findByIdAndDelete(id)
     } catch (error) {
-      throw new Error("Error deleting item: " + error.message)
+      throw new Error("Error deleting item by id: " + error.message)
+    }
+  }
+  async deleteMany(filers) {
+    try {
+      return await this.model.deleteMany(filers)
+    } catch (error) {
+      throw new Error("Error deleting item by filters: " + error.message)
     }
   }
 }

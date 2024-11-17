@@ -10,17 +10,16 @@
     <%}%>
     <form
       class="form"
-      action="/menu/form/validate"
+      action="/menu/form/<%=meal?.id%>"
       method="post"
-      data-mealId="<%=meal?.id%>"
-      onsubmit="RequestManager.onFormSubmit(event)"
+      enctype="multipart/form-data"
     >
       <div class="row-1">
         <div class="image__container">
           <div class="drop-area" alt="">
             <img
               id="image"
-              src="/<%=meal?.imgSrc%>"
+              src="<%=meal?.image%>"
               onerror="DropArea.hideImg(this)"
             />
             <span class="drop-text">Click Me</span>

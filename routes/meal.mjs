@@ -1,10 +1,9 @@
 import { Router } from "express"
 import MealController from "../controllers/MealController.mjs"
 import MealValidator from "../validators/MealValidator.mjs"
-import ValidationController from "../controllers/ValidationController.mjs"
 import { checkSchema } from "express-validator"
 import ReviewValidator from "../validators/ReviewValidator.mjs"
-import upload from "../config/multer.mjs"
+import upload from "../middlewares/multer.mjs"
 import {
   ensureAuthenticated,
   ensureManager,
@@ -23,15 +22,11 @@ router.get(
 router.get("/:id", MealController.renderSpecific)
 
 router.post(
-  "/form/validate/:id?",
-  checkSchema(MealValidator.schema),
-  ValidationController.validateMealFields
-)
-router.post(
   "/form/:id?",
   upload.single("image"),
   ensureAuthenticated,
   ensureManager,
+  checkSchema(MealValidator.schema),
   MealController.updateMeal
 )
 

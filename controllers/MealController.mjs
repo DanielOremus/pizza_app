@@ -3,8 +3,7 @@ import CategoryManager from "../models/category/CategoryManager.mjs"
 import MealManager from "../models/meal/MealManager.mjs"
 import ReviewManager from "../models/review/ReviewManager.mjs"
 import UserManager from "../models/user/UserManager.mjs"
-import { removeImageSync } from "../utils/ImageManager.mjs"
-import User from "../models/user/User.mjs"
+import { optimizeImage } from "../utils/ImageManager.mjs"
 
 class MealController {
   static async loadList(req, res) {
@@ -68,11 +67,27 @@ class MealController {
     const id = req.params.id
     const { title, description, price, category } = req.body
     const mealNewProps = { title, description, price, category }
-    if (req.file) {
-      const meal = await MealManager.getById(id)
-      removeImageSync(meal, "uploads")
-      mealNewProps.imgSrc = req.file.filename
+
+    const errors = validationResult(req)
+
+    if (!errors.isEmpty()) {
+      if (id) mealNewProps.id = id
+      return res.status(400).render("layouts/main", {
+        title: "Form",
+        body: "../meals/form",
+        meal: mealNewProps,
+        user: req.user,
+        categories: await CategoryManager.getList(),
+        errors: errors.array(),
+      })
     }
+
+    if (req.file?.buffer) {
+      const optimizedBuffer = await optimizeImage(req.file.buffer, 800)
+      mealNewProps.image =
+        `data:${req.file.mimetype};base64,` + optimizedBuffer.toString("base64")
+    }
+
     try {
       if (id) {
         await MealManager.updateById(id, mealNewProps)
@@ -100,7 +115,7 @@ class MealController {
         return res
           .status(404)
           .render("error", { error: "Delete failed, meal not found" })
-      removeImageSync(meal, "uploads")
+      // removeImageSync(meal, "uploads")
       // await MealManager.delete(id)
       await ReviewManager.deleteMany({ meal: meal._id })
       res.json({ success: true })
@@ -110,8 +125,6 @@ class MealController {
   }
   static async renderForm(req, res) {
     try {
-      console.log(req.user)
-
       const { id } = req.params
       let mealObj = null
       if (id) {

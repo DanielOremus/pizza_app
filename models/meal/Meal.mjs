@@ -17,7 +17,7 @@ const mealSchema = new mongoose.Schema({
 
     trim: true,
   },
-  imgSrc: String,
+  image: String,
 
   price: {
     type: Number,

@@ -1,7 +1,5 @@
 class RequestManager {
   static async deleteRequest(path, body, callback) {
-    console.log(body)
-
     const response = await fetch(path, {
       method: "DELETE",
       headers: {
@@ -18,37 +16,38 @@ class RequestManager {
     }
     return data
   }
-  static async onFormSubmit(e) {
-    e.preventDefault()
-    const formEl = e.target
-    const id = formEl.getAttribute("data-mealId")
-    const formData = new FormData(formEl)
+  // !Deprecated - do not use
+  // static async onFormSubmit(e) {
+  //   e.preventDefault()
+  //   const formEl = e.target
+  //   const id = formEl.getAttribute("data-mealId")
+  //   const formData = new FormData(formEl)
 
-    const validationResponse = await fetch(
-      `${formEl.getAttribute("action")}/${id}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          title: formData.get("title"),
-          price: formData.get("price"),
-          description: formData.get("description"),
-          category: formData.get("category"),
-        }),
-      }
-    )
+  //   const validationResponse = await fetch(
+  //     `${formEl.getAttribute("action")}/${id}`,
+  //     {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         title: formData.get("title"),
+  //         price: formData.get("price"),
+  //         description: formData.get("description"),
+  //         category: formData.get("category"),
+  //       }),
+  //     }
+  //   )
 
-    if (!validationResponse.ok) {
-      const data = await validationResponse.text()
-      console.log(data)
+  //   if (!validationResponse.ok) {
+  //     const data = await validationResponse.text()
+  //     console.log(data)
 
-      DOMLoader.renderFromString(data)
-    } else {
-      await RequestManager.postRequest(`/menu/form/${id}`, formData)
-    }
-  }
+  //     DOMLoader.renderFromString(data)
+  //   } else {
+  //     await RequestManager.postRequest(`/menu/form/${id}`, formData)
+  //   }
+  //  }
   static async postRequest(url, body) {
     try {
       const response = await fetch(url, {
@@ -74,9 +73,6 @@ class RequestManager {
     const formData = new FormData(formEl)
 
     const mealId = formEl.getAttribute("data-mealId")
-    console.log("==========")
-
-    console.log(mealId)
 
     const url = formEl.getAttribute("action")
     try {

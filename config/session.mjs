@@ -1,6 +1,5 @@
 import session from "express-session"
 import config from "./default.mjs"
-console.log(config.session.secret)
 
 export default session({
   secret: config.session.secret,

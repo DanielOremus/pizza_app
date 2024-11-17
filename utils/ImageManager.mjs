@@ -1,6 +1,14 @@
 import path from "path"
 import fs from "fs"
+import sharp from "sharp"
 
+export async function optimizeImage(buffer, width) {
+  const image = await sharp(buffer)
+    .resize(width)
+    .png({ quality: 90, force: false })
+    .toBuffer()
+  return image
+}
 export function removeImageSync(itemObj, folderPath) {
   try {
     const imagePath = path.join(folderPath, itemObj.imgSrc)

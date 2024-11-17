@@ -3,7 +3,7 @@
   <div class="main-container">
     <div class="meal-info">
       <img
-        src="/<%= meal.imgSrc ? meal.imgSrc : 'no_image.png'%>"
+        src="<%= meal.image ? meal.image : '/no_image.png'%>"
         alt="Meal Image"
         class="meal-image"
       />
@@ -119,7 +119,6 @@
     <div class="reviews-container">
       <%for (const review of reviews){%>
       <div class="review">
-        <%console.log(review.user)%>
         <span class="name"><%=review.user.fullName%></span>
         <br />
         <div class="rating">

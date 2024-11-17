@@ -8,8 +8,6 @@ export default new LocalStrategy(
   { usernameField: "email", passwordField: "password" },
   async (email, password, done) => {
     try {
-      console.log(11111111111)
-
       const user = await UserManager.getOne({ email }, {}, ["role"])
       if (!user)
         return done(null, false, { message: "Email or password is incorrect!" })
