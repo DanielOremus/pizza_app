@@ -4,23 +4,31 @@ import { validationResult } from "express-validator"
 class AuthController {
   static renderLogin(req, res) {
     res.render("auth/login", {
-      title: "Login",
+      formData: null,
       errors: [],
     })
   }
   static renderSignUp(req, res) {
     res.render("auth/signup", {
-      title: "Signup",
+      formData: null,
       errors: [],
     })
   }
   static login(req, res, next) {
+    const errors = validationResult(req)
+    const { email } = req.body
+    if (!errors.isEmpty()) {
+      return res.status(400).render("auth/login", {
+        formData: { email },
+        errors: errors.array(),
+      })
+    }
     passport.authenticate("local", (err, user, info) => {
       if (err) return next(err)
       if (!user)
         return res.status(400).render("auth/login", {
-          title: "Login",
-          errors: [{ msg: info.message }],
+          formData: { email },
+          errors: [{ path: "email-password", msg: info.message }],
         })
       req.login(user, (err) => {
         if (err) return next(err)
@@ -34,8 +42,7 @@ class AuthController {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
       return res.status(400).render("auth/signup", {
-        title: "Sign Up",
-        user: newUser,
+        formData: newUser,
         errors: errors.array(),
       })
     }
@@ -47,8 +54,7 @@ class AuthController {
       })
     } catch (error) {
       return res.status(400).render("auth/signup", {
-        title: "Sign Up",
-        user: newUser,
+        formData: newUser,
         errors: [{ msg: error.message }],
       })
     }

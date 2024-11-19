@@ -10,10 +10,10 @@ export default new LocalStrategy(
     try {
       const user = await UserManager.getOne({ email }, {}, ["role"])
       if (!user)
-        return done(null, false, { message: "Email or password is incorrect!" })
+        return done(null, false, { message: "Incorrect email or password" })
       const isPasswordCorrect = await bcrypt.compare(password, user.password)
       if (!isPasswordCorrect)
-        return done(null, false, { message: "Email or password is incorrect!" })
+        return done(null, false, { message: "Incorrect email or password" })
       done(null, user)
     } catch (error) {
       done(error)

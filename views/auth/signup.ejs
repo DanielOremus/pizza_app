@@ -3,29 +3,76 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><%=title%></title>
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="/stylesheets/fonts.css" />
+    <link rel="stylesheet" href="/stylesheets/main.css" />
+    <link rel="stylesheet" href="/stylesheets/pages/auth.css" />
   </head>
   <body>
-    <div>
+    <div class="form-container">
+      <div class="title">Register</div>
       <form action="/auth/signup" method="post">
-        <label
-          >Email
-          <input type="email" name="email" />
-        </label>
-        <label
-          >First Name
-          <input type="text" name="firstName" />
-        </label>
-        <label
-          >Last Name
-          <input type="text" name="lastName" />
-        </label>
-        <label
-          >Password
-          <input type="text" name="password" />
-        </label>
         <div>
-          <button type="submit">Sign Up</button>
+          <input
+            type="email"
+            name="email"
+            class="field"
+            placeholder="Email"
+            value="<%=formData?.email%>"
+          />
+          <%const emailErrIndex = errors.findIndex(err=>err.path==='email')%>
+          <%if(emailErrIndex!==-1){%>
+          <div class="error"><%=errors[emailErrIndex].msg%></div>
+          <%}%>
+        </div>
+        <div>
+          <input
+            type="text"
+            name="firstName"
+            class="field"
+            placeholder="First Name"
+            value="<%=formData?.firstName%>"
+          />
+          <%const firstNameErrIndex =
+          errors.findIndex(err=>err.path==='firstName')%>
+          <%if(firstNameErrIndex!==-1){%>
+          <div class="error"><%=errors[firstNameErrIndex].msg%></div>
+          <%}%>
+        </div>
+        <div>
+          <input
+            type="text"
+            name="lastName"
+            class="field"
+            placeholder="Last Name"
+            value="<%=formData?.lastName%>"
+          />
+          <%const lastNameErrIndex =
+          errors.findIndex(err=>err.path==='lastName')%>
+          <%if(lastNameErrIndex!==-1){%>
+          <div class="error"><%=errors[lastNameErrIndex].msg%></div>
+          <%}%>
+        </div>
+        <div>
+          <input
+            type="text"
+            name="password"
+            class="field"
+            placeholder="Password"
+          />
+          <%const passwordErrIndex =
+          errors.findIndex(err=>err.path==='password')%>
+          <%if(passwordErrIndex!==-1){%>
+          <div class="error"><%=errors[passwordErrIndex].msg%></div>
+          <%}%>
+        </div>
+        <div>
+          <button type="submit" class="btn">Sign up</button>
+        </div>
+
+        <div class="login">
+          Already have an account?
+          <span><a href="/auth/login">Log in</a></span>
         </div>
       </form>
     </div>
