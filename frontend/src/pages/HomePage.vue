@@ -1,13 +1,13 @@
 <template lang="">
-  <Header />
-  Home Page
+  <MainMasterPage> Home Page </MainMasterPage>
 </template>
 <script>
-import Header from "@/components/sections/Header.vue"
+import MainMasterPage from "@/layouts/MainMasterPage.vue"
+
 export default {
   name: "HomePage",
   components: {
-    Header,
+    MainMasterPage,
   },
 }
 </script>

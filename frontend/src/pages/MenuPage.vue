@@ -1,16 +1,17 @@
 <template lang="">
-  <Header />
-  Menu Page
-  <ProductList />
+  <MainMasterPage :background="1">
+    <ProductList />
+  </MainMasterPage>
 </template>
 <script>
-import Header from "@/components/sections/Header.vue"
 import ProductList from "@/components/product/productList/index.vue"
+import MainMasterPage from "@/layouts/MainMasterPage.vue"
+
 export default {
   name: "MenuPage",
   components: {
-    Header,
     ProductList,
+    MainMasterPage,
   },
 }
 </script>

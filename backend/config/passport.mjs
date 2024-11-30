@@ -1,6 +1,6 @@
 import passport from "passport"
 import LocalStrategy from "../strategies/local.mjs"
-import UserManager from "../models/user/UserManager.mjs"
+import UserManager from "../api/v2/models/user/UserManager.mjs"
 
 passport.use(LocalStrategy)
 

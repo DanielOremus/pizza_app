@@ -3,29 +3,24 @@ import MealController from "../controllers/MealController.mjs"
 import MealValidator from "../validators/MealValidator.mjs"
 import { checkSchema } from "express-validator"
 import ReviewValidator from "../validators/ReviewValidator.mjs"
-import upload from "../middlewares/multer.mjs"
+import upload from "../../../middlewares/multer.mjs"
 import {
   ensureAuthenticated,
   ensureManager,
   ensureAccountOwner,
-} from "../middlewares/auth.mjs"
+} from "../../../middlewares/auth.mjs"
 
 const router = Router()
 
-router.get("/", MealController.loadList)
-router.get(
-  "/form/:id?",
-  ensureAuthenticated,
-  ensureManager,
-  MealController.renderForm
-)
-router.get("/:id", MealController.renderSpecific)
+router.get("/", MealController.getList)
+
+router.get("/:id", MealController.getSpecific)
 
 router.post(
   "/form/:id?",
   upload.single("image"),
-  ensureAuthenticated,
-  ensureManager,
+  // ensureAuthenticated,
+  // ensureManager,
   checkSchema(MealValidator.schema),
   MealController.updateMeal
 )
@@ -38,8 +33,8 @@ router.post(
 )
 router.delete(
   "/",
-  ensureAuthenticated,
-  ensureManager,
+  // ensureAuthenticated,
+  // ensureManager,
   MealController.deleteMeal
 )
 

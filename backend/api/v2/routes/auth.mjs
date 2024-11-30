@@ -4,13 +4,11 @@ import AuthValidator from "../validators/AuthValidator.mjs"
 import {
   ensureAuthenticated,
   ensureNotAuthenticated,
-} from "../middlewares/auth.mjs"
+} from "../../../middlewares/auth.mjs"
 import { checkSchema } from "express-validator"
 
 const router = Router()
 
-router.get("/login", ensureNotAuthenticated, AuthController.renderLogin)
-router.get("/signup", ensureNotAuthenticated, AuthController.renderSignUp)
 router.get("/logout", ensureAuthenticated, AuthController.logout)
 
 router.post(

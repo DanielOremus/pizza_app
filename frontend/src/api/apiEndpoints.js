@@ -6,6 +6,9 @@ export default {
     getById: (id) => `${API_BASE}/menu/${id}`,
     create: `${API_BASE}/menu/form`,
     updateById: (id) => `${API_BASE}/menu/form/${id}`,
-    deleteById: (id) => `${API_BASE}/menu/${id}`,
+    deleteById: `${API_BASE}/menu`,
+  },
+  categories: {
+    getAll: `${API_BASE}/categories`,
   },
 }

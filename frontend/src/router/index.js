@@ -1,26 +1,34 @@
 import { createWebHistory, createRouter } from "vue-router"
-
-import HomePage from "@/pages/HomePage.vue"
-import AboutPage from "@/pages/AboutPage.vue"
-import MenuPage from "@/pages/MenuPage.vue"
+import mainRoutes from "./main.js"
+import menuRoutes from "./menu.js"
+// import authRoutes from "./auth.js"
 
 const routes = [
-  { path: "/", component: HomePage, name: "HomePage" },
   {
-    path: "/about",
-    component: AboutPage,
-    name: "AboutPage",
+    path: "/",
+    children: [...mainRoutes],
   },
   {
     path: "/menu",
-    component: MenuPage,
-    name: "MenuPage",
+    children: [...menuRoutes],
   },
+  // {
+  //   path: "/auth",
+  //   children: [...authRoutes],
+  // },
 ]
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
 })
+
+// router.beforeEach((to, from) => {
+//   if (to.meta.requriesAuth) {
+//     return {
+//       path: "",
+//     }
+//   }
+// })
 
 export default router

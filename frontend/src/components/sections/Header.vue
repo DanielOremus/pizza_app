@@ -1,38 +1,33 @@
 <template>
   <nav>
-    <v-container class="bg-grey-darken-4 mx-0" fluid>
+    <v-container class="bg-grey-darken-4 mx-0 py-5" fluid>
       <v-row class="text-center align-center">
-        <v-col class="text-h4">Charlestown</v-col>
+        <v-col class="text-h3 py-0">
+          <span
+            class="cursor-pointer main-title"
+            @click="$router.push({ name: 'HomePage' })"
+          >
+            Charlestown
+          </span>
+        </v-col>
         <v-col cols="6">
-          <div class="d-flex ga-16 justify-center">
-            <v-btn
-              variant="text"
-              :ripple="false"
-              class="text-h6"
+          <div class="header d-flex ga-16 justify-center text-h5">
+            <span
+              class="cursor-pointer"
               @click="$router.push({ name: 'HomePage' })"
-              >Home</v-btn
+              >Home</span
             >
 
-            <v-btn
-              variant="text"
-              :ripple="false"
-              class="text-h6"
-              @click="$router.push({ name: 'MenuPage' })"
-              >Menu</v-btn
-            >
-            <v-btn
-              variant="text"
-              :ripple="false"
-              class="text-h6"
-              @click="$router.push({ name: 'AboutPage' })"
-              >About Us</v-btn
-            >
-            <v-icon
+            <span
               class="cursor-pointer"
-              icon="fas fa-cart-shopping"
-              size="x-large"
-              color="warning"
-            ></v-icon>
+              @click="$router.push({ name: 'MenuPage' })"
+              >Menu</span
+            >
+            <span
+              class="cursor-pointer"
+              @click="$router.push({ name: 'AboutPage' })"
+              >About Us</span
+            >
           </div>
         </v-col>
         <v-col>
@@ -49,4 +44,26 @@ export default {
   name: "Header",
 }
 </script>
-<style scoped></style>
+<style lang="scss" scoped>
+.v-col > div > *,
+.v-col > span {
+  font-family: $arima;
+}
+.main-title {
+  font-weight: 700;
+  line-height: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(251, 91, 0, 1) 0%,
+    rgba(236, 221, 0, 1) 88%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.header > span {
+  transition: color 0.1s ease;
+  &:hover {
+    color: $amber;
+  }
+}
+</style>

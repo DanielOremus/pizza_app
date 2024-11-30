@@ -1,6 +1,6 @@
 // import passport from "passport"
 import { Strategy as LocalStrategy } from "passport-local"
-import UserManager from "../models/user/UserManager.mjs"
+import UserManager from "../api/v2/models/user/UserManager.mjs"
 // import User from "../models/user/User.mjs"
 import bcrypt from "bcrypt"
 
