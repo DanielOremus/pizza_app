@@ -39,12 +39,19 @@ export default {
       })
     },
   },
-
+  watch: {
+    "$route.query": {
+      immediate: true,
+      handler({ page, perPage }) {
+        this.loadList({ page: page, perPage: perPage })
+      },
+    },
+  },
   beforeRouteUpdate(to, from, next) {
     console.log(111)
 
-    this.loadList({ page: to.query.page, perPage: to.query.perPage })
-    // next()
+    // this.loadList({ page: to.query.page, perPage: to.query.perPage })
+    next()
   },
   mounted() {},
 }
