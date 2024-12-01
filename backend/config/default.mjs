@@ -9,6 +9,9 @@ export default Object.freeze({
     port: process.env.PORT,
   },
   session: {
-    secret: process.env.SECRET,
+    secret: process.env.SESSION_SECRET,
+  },
+  jwt: {
+    secret: process.env.JWT_SECRET,
   },
 })

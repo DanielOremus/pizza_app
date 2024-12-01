@@ -12,13 +12,14 @@ class MealManager extends MongooseCRUDManager {
       if (filters.title) {
         filters.title = new RegExp(`${filters.title}`, "i")
       }
-      const list = await super.getList(
+      const { documents, count } = await super.getList(
         filters,
         projection,
         options,
         populateFields
       )
-      return list
+
+      return { mealList: documents, count }
     } catch (err) {
       return []
     }

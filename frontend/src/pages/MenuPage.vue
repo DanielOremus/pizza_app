@@ -1,5 +1,5 @@
 <template lang="">
-  <MainMasterPage :background="1">
+  <MainMasterPage background="/menu-bg.png">
     <ProductList />
   </MainMasterPage>
 </template>

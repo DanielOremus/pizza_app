@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card class="bg-black pa-10 w-50 mx-auto rounded-lg" variant="outlined">
     <v-form @submit.prevent="onSubmit" validate-on="input" v-model="form">
       <v-file-input
         label="Image"
@@ -10,6 +10,7 @@
       <v-text-field
         name="title"
         label="Title"
+        variant="outlined"
         v-model="title.value"
         :rules="title.rules"
         :counter="20"
@@ -18,6 +19,7 @@
       <v-text-field
         name="price"
         label="Price"
+        variant="outlined"
         v-model="price.value"
         :rules="price.rules"
       ></v-text-field>
@@ -25,6 +27,7 @@
       <v-text-field
         label="Description"
         name="description"
+        variant="outlined"
         :rules="description.rules"
         textarea
         v-model="description.value"
@@ -33,13 +36,23 @@
         :items="categoryList"
         item-title="title"
         item-value="_id"
+        variant="outlined"
         v-model="category.value"
         label="Category"
         :rules="category.rules"
       ></v-select>
-      <v-btn color="success" type="submit" :disabled="!isDataValid">{{
-        btnTitle
-      }}</v-btn>
+      <div class="card-actions d-flex ga-2">
+        <v-btn
+          color="success"
+          class="w-50"
+          type="submit"
+          :disabled="!isDataValid"
+          >{{ btnTitle }}</v-btn
+        >
+        <v-btn color="error" class="" type="button" @click="onBackToMenu"
+          >Back to Menu</v-btn
+        >
+      </div>
     </v-form>
   </v-card>
 </template>
@@ -144,6 +157,9 @@ export default {
       this.price.value = product.price
       this.description.value = product.description
       this.category.value = product.category?._id
+    },
+    onBackToMenu() {
+      this.$router.push({ name: "MenuPage" })
     },
   },
   async mounted() {

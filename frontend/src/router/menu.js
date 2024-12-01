@@ -1,12 +1,12 @@
-import MenuPage from "@/pages/MenuPage.vue"
 import SpecificProductPage from "@/pages/SpecificProductPage.vue"
 import ProductFormPage from "@/pages/ProductFormPage.vue"
+import MenuPage from "@/pages/MenuPage.vue"
 
 export default [
   {
     path: "",
-    component: MenuPage,
     name: "MenuPage",
+    component: MenuPage,
   },
   {
     path: ":id",

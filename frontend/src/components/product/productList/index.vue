@@ -1,35 +1,52 @@
 <template>
-  <v-container class="list py-10">
-    <template
-      v-if="!isLoading"
-      v-for="product in productList"
-      :key="product._id"
-    >
-      <ProductCard :product="product"></ProductCard>
-    </template>
-    <div v-else>Products are loading</div>
+  <v-container class="list-container">
+    <v-container class="list py-10 flex-grow-1 min-h-100" v-if="!isLoading">
+      <ProductCard
+        v-for="product in currentProducts"
+        :key="product._id"
+        :product="product"
+      ></ProductCard>
+    </v-container>
+    <div v-else class="text-white">Products are loading</div>
+    <Pagination
+      :total-items="totalProducts"
+      @pagination-changed="onPageChange"
+    />
   </v-container>
 </template>
 
 <script>
 import ProductCard from "../productCard/index.vue"
+import Pagination from "@/components/product/productList/Pagination.vue"
+
 import { mapActions, mapGetters } from "vuex"
 export default {
   name: "ProductList",
-  components: { ProductCard },
+  components: { ProductCard, Pagination },
   computed: {
-    ...mapGetters("products", ["productList", "isLoading"]),
+    ...mapGetters("products", [
+      "currentProducts",
+      "totalProducts",
+      "isLoading",
+    ]),
   },
   methods: {
     ...mapActions("products", ["loadList"]),
+    onPageChange({ page, perPage }) {
+      console.log({ page, perPage })
+      this.$router.push({
+        query: { page, perPage },
+      })
+    },
   },
-  async mounted() {
-    try {
-      await this.loadList()
-    } catch (error) {
-      console.log(error)
-    }
+
+  beforeRouteUpdate(to, from, next) {
+    console.log(111)
+
+    this.loadList({ page: to.query.page, perPage: to.query.perPage })
+    // next()
   },
+  mounted() {},
 }
 </script>
 
@@ -39,6 +56,7 @@ export default {
   grid-template-columns: repeat(3, 250px);
   justify-content: center;
   align-items: center;
-  gap: 5%;
+  row-gap: 8%;
+  column-gap: 5%;
 }
 </style>

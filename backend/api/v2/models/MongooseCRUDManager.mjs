@@ -9,7 +9,7 @@ class MongooseCRUDManager {
     populateFields = []
   ) {
     try {
-      const query = this.model.find(filters, projection, options)
+      const query = this.model.find(filters, projection)
 
       for (const field of populateFields) {
         if (typeof field === "string") {
@@ -28,7 +28,13 @@ class MongooseCRUDManager {
         }
       }
 
-      return await query.exec()
+      const count = await this.model.countDocuments(query)
+      console.log(count)
+
+      query.setOptions(options)
+
+      const documents = await query.exec()
+      return { documents, count }
     } catch (error) {
       throw new Error("Error getting data: " + error.message)
     }

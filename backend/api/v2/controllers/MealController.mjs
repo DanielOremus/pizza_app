@@ -8,16 +8,36 @@ import { optimizeImage } from "../../../utils/ImageManager.mjs"
 class MealController {
   static async getList(req, res) {
     try {
-      const queryParams = {}
+      // const queryParams = {}
 
-      for (const key in req.query) {
-        if (req.query[key]) queryParams[key] = req.query[key]
-      }
-      const mealList = await MealManager.getList(queryParams, {}, {}, [
-        "category",
-      ])
+      // for (const key in req.query) {
+      //   if (req.query[key]) queryParams[key] = req.query[key]
+      // }
+      // const mealList = await MealManager.getList(queryParams, {}, {}, [
+      //   "category",
+      // ])
+      console.log(req.query)
 
-      res.json({ success: true, data: mealList })
+      const { page, perPage } = req.query
+      const skipNumber = parseInt(page * perPage)
+      const limitNumber = parseInt(perPage)
+      const { mealList, count } = await MealManager.getList(
+        {},
+        {},
+        { skip: skipNumber, limit: limitNumber },
+
+        ["category"]
+      )
+
+      res.json({
+        success: true,
+        data: {
+          items: mealList,
+          totalItems: count,
+          currentPage: parseInt(page),
+          perPage: parseInt(perPage),
+        },
+      })
     } catch (err) {
       res.status(500).json({ success: false, error: err })
       // res.status(500).render("error", { error: err })

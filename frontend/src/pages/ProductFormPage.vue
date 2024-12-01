@@ -1,8 +1,6 @@
 <template>
   <MainMasterPage>
-    <v-sheet>
-      <ProductForm />
-    </v-sheet>
+    <ProductForm />
   </MainMasterPage>
 </template>
 
@@ -19,4 +17,8 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.v-sheet {
+  box-sizing: border-box;
+}
+</style>

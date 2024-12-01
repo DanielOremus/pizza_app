@@ -5,8 +5,9 @@ import FormDataHelper from "@/utils/FormDataHelper.js"
 export default {
   namespaced: true,
   state: {
-    productList: [],
+    currentPageProducts: [],
     isLoading: false,
+    totalItems: 0,
   },
   getters: {
     isLoading(state) {
@@ -15,41 +16,55 @@ export default {
     // getById: (state) => (id) => {
     //   return state.productList.find((el) => el._id === id)
     // },
-    productList(state) {
-      return state.productList
+    currentProducts(state) {
+      return state.currentPageProducts
+    },
+    totalProducts(state) {
+      return state.totalItems
     },
   },
   mutations: {
     setLoading(state, status) {
       state.isLoading = status
     },
-    setProductList(state, products) {
-      state.productList = products
+    setCurrentProducts(state, payload) {
+      state.currentPageProducts = payload.items
+      state.totalItems = payload.totalItems
     },
     addProduct(state, payload) {
       state.productList.push(payload.product)
     },
     updateProduct(state, payload) {
-      const productIndex = state.productList.findIndex(
+      const productIndex = state.currentPageProducts.findIndex(
         (el) => el._id === payload.productId
       )
       if (productIndex === -1) return
-      let product = state.productList[productIndex]
+      let product = state.currentPageProducts[productIndex]
       product = { ...product, ...payload.newData }
-      state.productList.splice(productIndex, 1, product)
+      state.currentPageProducts.splice(productIndex, 1, product)
     },
     deleteProduct(state, id) {
-      state.productList = state.productList.filter((el) => el._id !== id)
+      state.currentPageProducts = state.currentPageProducts.filter(
+        (el) => el._id !== id
+      )
     },
   },
   actions: {
-    async loadList({ commit }) {
+    async loadList({ commit, getters, rootGetters }, payload = {}) {
       try {
-        commit("setLoading", true)
-        const response = await axios.get(apiEndpoints.products.getAll)
-        const resData = response.data
+        console.log(payload)
 
-        commit("setProductList", resData.data)
+        commit("setLoading", true)
+        const response = await axios.get(apiEndpoints.products.getAll, {
+          params: {
+            perPage: payload.perPage ?? rootGetters["pagination/itemsPerPage"],
+            page: payload.page ?? rootGetters["pagination/startPage"],
+          },
+        })
+        const resData = response.data
+        console.log(resData)
+
+        commit("setCurrentProducts", resData.data)
       } catch (error) {
         console.log(error)
       } finally {
@@ -62,6 +77,7 @@ export default {
         const response = await axios.get(apiEndpoints.products.getById(id))
 
         const resData = response.data
+
         return { meal: resData.data.meal, reviews: resData.data.reviews }
       } catch (error) {
         console.log(error)

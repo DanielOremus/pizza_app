@@ -3,8 +3,13 @@
     <header>
       <Header></Header>
     </header>
-    <main class="flex-grow-1">
-      <slot />
+    <main class="flex-grow-1 d-flex">
+      <div
+        class="background flex-grow-1 min-h-100 d-flex flex-column align-center justify-center"
+        :style="{ backgroundImage: `url(${background})` }"
+      >
+        <slot />
+      </div>
     </main>
     <footer>
       <Footer></Footer>
@@ -21,6 +26,12 @@ export default {
     Header,
     Footer,
   },
+  props: {
+    background: {
+      type: String,
+      default: "/main-bg.jpg",
+    },
+  },
 }
 </script>
 
@@ -30,5 +41,10 @@ export default {
 }
 * {
   box-sizing: border-box;
+}
+.background {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 </style>

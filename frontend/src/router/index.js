@@ -1,6 +1,7 @@
 import { createWebHistory, createRouter } from "vue-router"
 import mainRoutes from "./main.js"
 import menuRoutes from "./menu.js"
+import MenuPage from "@/pages/MenuPage.vue"
 // import authRoutes from "./auth.js"
 
 const routes = [
@@ -10,6 +11,7 @@ const routes = [
   },
   {
     path: "/menu",
+    component: MenuPage,
     children: [...menuRoutes],
   },
   // {
