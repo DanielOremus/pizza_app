@@ -9,14 +9,14 @@ class ReviewManager extends MongooseCRUDManager {
     populateFields = []
   ) {
     try {
-      const list = await super.getList(
+      const { documents, count } = await super.getList(
         filters,
         projection,
         options,
         populateFields
       )
 
-      return list
+      return { reviewList: documents, count }
     } catch (error) {
       return []
     }

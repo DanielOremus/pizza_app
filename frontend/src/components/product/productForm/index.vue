@@ -41,18 +41,26 @@
         label="Category"
         :rules="category.rules"
       ></v-select>
-      <div class="card-actions d-flex ga-2">
-        <v-btn
-          color="success"
-          class="w-50"
-          type="submit"
-          :disabled="!isDataValid"
-          >{{ btnTitle }}</v-btn
-        >
-        <v-btn color="error" class="" type="button" @click="onBackToMenu"
-          >Back to Menu</v-btn
-        >
-      </div>
+      <v-row>
+        <v-col>
+          <v-btn
+            color="success"
+            class="w-100 font-weight-bold"
+            type="submit"
+            :disabled="!isDataValid"
+            >{{ btnTitle }}</v-btn
+          >
+        </v-col>
+        <v-col>
+          <v-btn
+            color="error"
+            class="w-100 font-weight-bold"
+            type="button"
+            @click="onBackToMenu"
+            >Back to Menu</v-btn
+          >
+        </v-col>
+      </v-row>
     </v-form>
   </v-card>
 </template>

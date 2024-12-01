@@ -29,7 +29,6 @@ class MongooseCRUDManager {
       }
 
       const count = await this.model.countDocuments(query)
-      console.log(count)
 
       query.setOptions(options)
 

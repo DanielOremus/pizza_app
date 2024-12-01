@@ -51,7 +51,7 @@ class MealController {
       if (!meal)
         return res.status(404).json({ success: false, msg: "Meal not found" })
 
-      const reviews = await ReviewManager.getList(
+      const { reviewList, count } = await ReviewManager.getList(
         { meal: meal._id },
         { meal: 0 },
         { sort: { createdAt: -1 } },
@@ -64,7 +64,7 @@ class MealController {
       )
       return res.json({
         success: true,
-        data: { meal, reviews },
+        data: { meal, reviews: reviewList },
       })
     } catch (err) {
       res.status(500).json({ success: false, error: err })

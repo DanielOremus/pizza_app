@@ -5,8 +5,8 @@ import MenuPage from "@/pages/MenuPage.vue"
 export default [
   {
     path: "",
-    name: "MenuPage",
     component: MenuPage,
+    name: "MenuPage",
   },
   {
     path: ":id",

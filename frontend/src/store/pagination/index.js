@@ -1,7 +1,7 @@
 export default {
   namespaced: true,
   state: {
-    itemsPerPage: 2,
+    itemsPerPage: 3,
     startPage: 0,
   },
   getters: {

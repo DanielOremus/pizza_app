@@ -27,7 +27,7 @@ export default {
   data() {
     return {
       currentPage: (parseInt(this.$route.query.page) || 0) + 1,
-      perPage: parseInt(this.$route.query.perPage) || 2,
+      perPage: parseInt(this.$route.query.perPage) || 3,
     }
   },
   computed: {

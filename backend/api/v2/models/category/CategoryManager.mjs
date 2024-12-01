@@ -9,7 +9,13 @@ class CategoryManager extends MongooseCRUDManager {
     populateFields = []
   ) {
     try {
-      return await super.getList(filters, projection, options, populateFields)
+      const { documents, count } = await super.getList(
+        filters,
+        projection,
+        options,
+        populateFields
+      )
+      return { categoryList: documents, count }
     } catch (error) {
       return []
     }
