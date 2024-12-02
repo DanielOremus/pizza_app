@@ -8,7 +8,7 @@ export default {
     currentPageProducts: [],
     isLoading: false,
     totalProductsNumber: 0,
-    productsPerPage: 3,
+    productsPerPage: 8,
     currentPage: 0,
   },
   getters: {

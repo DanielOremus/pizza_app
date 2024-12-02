@@ -1,13 +1,21 @@
 <template>
-  <v-container class="list-container">
-    <v-container class="list py-10 flex-grow-1 min-h-100" v-if="!isLoading">
+  <v-container class="list-container d-flex flex-column h-100">
+    <div
+      class="text-white d-flex flex-grow-1 min-h-100 align-center justify-center"
+      v-if="isLoading"
+    >
+      <v-sheet class="d-inline-flex pa-2" color="grey-darken-4" rounded="lg">
+        <v-progress-circular indeterminate></v-progress-circular>
+      </v-sheet>
+    </div>
+    <v-container v-else class="list py-10 flex-grow-1 min-h-100">
       <ProductCard
         v-for="product in currentProducts"
         :key="product._id"
         :product="product"
       ></ProductCard>
     </v-container>
-    <div v-else class="text-white">Products are loading</div>
+
     <Pagination
       :total-items-number="totalProductsNumber"
       :current-page="currentPage"
@@ -19,7 +27,7 @@
 
 <script>
 import ProductCard from "../productCard/index.vue"
-import Pagination from "@/components/product/productList/Pagination.vue"
+import Pagination from "@/components/pagination/Pagination.vue"
 
 import { mapActions, mapGetters } from "vuex"
 export default {
@@ -56,9 +64,9 @@ export default {
 <style scoped>
 .list {
   display: grid;
-  grid-template-columns: repeat(3, 250px);
-  justify-content: center;
-  align-items: center;
+  grid-template-columns: repeat(4, 250px);
+  justify-content: start;
+  align-items: baseline;
   row-gap: 8%;
   column-gap: 5%;
 }
