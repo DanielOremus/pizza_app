@@ -7,7 +7,9 @@ export default {
   state: {
     currentPageProducts: [],
     isLoading: false,
-    totalItems: 0,
+    totalProductsNumber: 0,
+    productsPerPage: 3,
+    currentPage: 0,
   },
   getters: {
     isLoading(state) {
@@ -19,8 +21,14 @@ export default {
     currentProducts(state) {
       return state.currentPageProducts
     },
-    totalProducts(state) {
-      return state.totalItems
+    currentPage(state) {
+      return state.currentPage
+    },
+    productsPerPage(state) {
+      return state.productsPerPage
+    },
+    totalProductsNumber(state) {
+      return state.totalProductsNumber
     },
   },
   mutations: {
@@ -29,7 +37,9 @@ export default {
     },
     setCurrentProducts(state, payload) {
       state.currentPageProducts = payload.items
-      state.totalItems = payload.totalItems
+      state.totalProductsNumber = payload.totalItems
+      state.productsPerPage = payload.perPage
+      state.currentPage = payload.currentPage
     },
     addProduct(state, payload) {
       state.productList.push(payload.product)

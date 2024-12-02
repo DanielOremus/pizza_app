@@ -9,7 +9,9 @@
     </v-container>
     <div v-else class="text-white">Products are loading</div>
     <Pagination
-      :total-items="totalProducts"
+      :total-items-number="totalProductsNumber"
+      :current-page="currentPage"
+      :items-per-page="productsPerPage"
       @pagination-changed="onPageChange"
     />
   </v-container>
@@ -26,34 +28,28 @@ export default {
   computed: {
     ...mapGetters("products", [
       "currentProducts",
-      "totalProducts",
+      "totalProductsNumber",
+      "productsPerPage",
+      "currentPage",
       "isLoading",
     ]),
   },
   methods: {
     ...mapActions("products", ["loadList"]),
-    onPageChange({ page, perPage }) {
-      console.log({ page, perPage })
+    async onPageChange(newPageNumber, perPageNumber = null) {
+      await this.loadList({ page: newPageNumber, perPage: perPageNumber })
       this.$router.push({
-        query: { page, perPage },
+        path: this.$route.path,
+        query: { page: this.currentPage, perPage: this.productsPerPage },
       })
     },
   },
-  watch: {
-    "$route.query": {
-      immediate: true,
-      handler({ page, perPage }) {
-        this.loadList({ page: page, perPage: perPage })
-      },
-    },
+  mounted() {
+    this.loadList({
+      page: this.$route.query.page,
+      perPage: this.$route.query.perPage,
+    })
   },
-  beforeRouteUpdate(to, from, next) {
-    console.log(111)
-
-    // this.loadList({ page: to.query.page, perPage: to.query.perPage })
-    next()
-  },
-  mounted() {},
 }
 </script>
 

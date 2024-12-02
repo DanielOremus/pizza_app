@@ -6,6 +6,8 @@ import UserManager from "../models/user/UserManager.mjs"
 import { optimizeImage } from "../../../utils/ImageManager.mjs"
 
 class MealController {
+  static startPage = 0
+  static defaultPerPage = 3
   static async getList(req, res) {
     try {
       // const queryParams = {}
@@ -18,7 +20,11 @@ class MealController {
       // ])
       console.log(req.query)
 
-      const { page, perPage } = req.query
+      let { page, perPage } = req.query
+
+      if (!isFinite(page)) page = MealController.startPage
+      if (!isFinite(perPage)) perPage = MealController.defaultPerPage
+
       const skipNumber = parseInt(page * perPage)
       const limitNumber = parseInt(perPage)
       const { mealList, count } = await MealManager.getList(
