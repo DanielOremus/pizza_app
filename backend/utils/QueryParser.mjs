@@ -23,7 +23,6 @@ class QueryParser {
       }
       ;[minValue, maxValue] = filterValue
     }
-    console.log(filterValue)
 
     const filters = []
 
@@ -72,8 +71,6 @@ class QueryParser {
         filters.push(...this[filterCategory](fieldName, query[fieldName]))
     })
 
-    console.log(filters)
-
     return filters
   }
   static actionsParser(query) {
@@ -91,8 +88,6 @@ class QueryParser {
       actions.push({ actionType: "skip", value: query.page * query.perPage })
       actions.push({ actionType: "limit", value: parseInt(query.perPage) })
     }
-
-    console.log(actions)
 
     return actions
   }
