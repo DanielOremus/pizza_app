@@ -7,20 +7,23 @@ class QueryParser {
     } else {
       if (!Array.isArray(filterValue)) {
         filterValue = [filterValue]
+
+        for (const value of filterValue) {
+          if (value.startsWith("gte:")) {
+            minValue = parseFloat(value.slice(4))
+            continue
+          }
+          if (value.startsWith("lte:")) {
+            maxValue = parseFloat(value.slice(4))
+            console.log(maxValue)
+          }
+        }
+      } else {
+        filterValue.length === 2
       }
+      ;[minValue, maxValue] = filterValue
     }
     console.log(filterValue)
-
-    for (const value of filterValue) {
-      if (value.startsWith("gte:")) {
-        minValue = parseFloat(value.slice(4))
-        continue
-      }
-      if (value.startsWith("lte:")) {
-        maxValue = parseFloat(value.slice(4))
-        console.log(maxValue)
-      }
-    }
 
     const filters = []
 

@@ -85,12 +85,20 @@
       </v-list>
       <v-row>
         <v-col cols="12">
-          <v-btn color="blue-darken-4" block class="font-weight-bold"
+          <v-btn
+            color="blue-darken-4"
+            block
+            class="font-weight-bold"
+            @click="onApplyFilters"
             >Apply Filters</v-btn
           >
         </v-col>
         <v-col cols="12">
-          <v-btn color="orange-accent-4" block class="font-weight-bold"
+          <v-btn
+            color="orange-accent-4"
+            block
+            class="font-weight-bold"
+            @click="onClearFilters"
             >Clear Filters</v-btn
           >
         </v-col>
@@ -106,7 +114,7 @@ export default {
     return {
       slider: {
         min: 0,
-        max: 5000,
+        max: 1000,
         step: 50,
       },
       priceRange: [],
@@ -120,15 +128,15 @@ export default {
         ],
       },
       selectedCategories: [],
-      sortBy: "name:asc",
+      sortBy: "title:asc",
       sortItems: [
         {
           title: "Title: A - Z",
-          value: "name:asc",
+          value: "title:asc",
         },
         {
           title: "Title: Z - A",
-          value: "name:desc",
+          value: "title:desc",
         },
         {
           title: "Price: Low - High",
@@ -148,20 +156,49 @@ export default {
     },
   },
   methods: {
+    async validateSearchField() {
+      return await this.$refs.titleField.validate()
+    },
     async onSearch() {
-      const errors = await this.$refs.titleField.validate()
-      console.log(errors)
-
+      const errors = await this.validateSearchField()
       if (errors.length > 0) return
-
       this.$emit("panel-event", {
         title: this.title.value.trim(),
       })
+      this.clearFields({ "title.value": 0 })
     },
-    onApplyFilters() {},
+    onClearFilters() {
+      this.clearFields()
+      this.$emit("panel-event", {})
+    },
+    onApplyFilters() {
+      const reqQuery = {
+        price: this.priceRange,
+        sort: this.sortBy,
+      }
+      if (this.selectedCategories.length)
+        reqQuery.category = this.selectedCategories.join(",")
+
+      const { title } = this.$route.query
+
+      if (title) reqQuery.title = title
+      this.$emit("panel-event", reqQuery)
+    },
+    initPriceRange() {
+      this.priceRange = [this.slider.min, this.slider.max]
+    },
+    clearFields(exceptFields = {}) {
+      //TODO: create better algorithm
+      this.initPriceRange()
+
+      this.selectedCategories = []
+      this.sortBy = "title:asc"
+      if (exceptFields["title.value"] === 0) return
+      this.title.value = null
+    },
   },
   created() {
-    this.priceRange = [this.slider.min, this.slider.max]
+    this.initPriceRange()
   },
 }
 </script>

@@ -1,19 +1,36 @@
 <template>
   <v-container class="list-container d-flex flex-column h-100">
     <div
-      class="text-white d-flex flex-grow-1 min-h-100 align-center justify-center"
+      class="spinner-container d-flex flex-grow-1 min-h-100 align-center justify-center"
       v-if="isLoading"
     >
-      <v-sheet class="d-inline-flex pa-2" color="grey-darken-4" rounded="lg">
+      <v-sheet
+        class="text-white d-inline-flex pa-2"
+        color="grey-darken-4"
+        rounded="lg"
+      >
         <v-progress-circular indeterminate></v-progress-circular>
       </v-sheet>
     </div>
-    <v-container v-else class="list py-10 flex-grow-1 min-h-100">
+
+    <v-container v-if="!isLoading" class="list py-10 flex-grow-1 min-h-100">
       <ProductCard
         v-for="product in currentProducts"
         :key="product._id"
         :product="product"
       ></ProductCard>
+      <div
+        class="not-found-container d-flex flex-grow-1 min-h-100 align-center justify-center"
+        v-if="!currentProducts.length"
+      >
+        <v-sheet
+          class="text-white pa-2"
+          color="grey-darken-4 px-6 text-h6"
+          rounded="lg"
+        >
+          Sorry, we couldn't find any dishes
+        </v-sheet>
+      </div>
     </v-container>
 
     <Pagination
@@ -45,18 +62,20 @@ export default {
   methods: {
     ...mapActions("products", ["loadList"]),
     async onPageChange(newPageNumber, perPageNumber = null) {
-      await this.loadList({ page: newPageNumber, perPage: perPageNumber })
+      const reqQuery = {
+        ...this.$route.query,
+        page: newPageNumber,
+        perPage: perPageNumber,
+      }
+      this.loadList(reqQuery)
       this.$router.push({
         path: this.$route.path,
-        query: { page: this.currentPage, perPage: this.productsPerPage },
+        query: reqQuery,
       })
     },
   },
   mounted() {
-    this.loadList({
-      page: this.$route.query.page,
-      perPage: this.$route.query.perPage,
-    })
+    this.loadList(this.$route.query)
   },
 }
 </script>
@@ -69,5 +88,9 @@ export default {
   align-items: baseline;
   row-gap: 2rem;
   column-gap: 5%;
+}
+.not-found-container {
+  grid-column: 2 / span 2;
+  align-self: center;
 }
 </style>

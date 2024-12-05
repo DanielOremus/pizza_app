@@ -31,17 +31,23 @@ class MongooseCRUDManager {
     try {
       let query = this.model.find({}, projection)
 
-      const filledQuery = FiltersHelper.applyAllParamsFromQuery(
+      query = FiltersHelper.applyFiltersFromQuery(
         reqQuery,
         fieldsConfiguration,
         query
       )
 
-      const count = await this.model.countDocuments(filledQuery)
+      const count = await this.model.countDocuments(query)
 
-      this.addPopulation(filledQuery, populateFields)
+      query = FiltersHelper.applyActionsFromQuery(
+        reqQuery,
+        fieldsConfiguration,
+        query
+      )
 
-      const documents = await filledQuery.exec()
+      this.addPopulation(query, populateFields)
+
+      const documents = await query.exec()
 
       return { documents, count }
     } catch (error) {

@@ -12,6 +12,19 @@ class FiltersHelper {
 
     return query
   }
+
+  static applyFiltersFromQuery(reqQuery, fieldsConfiguration, query) {
+    const { filters } = QueryParser.parseQuery(reqQuery, fieldsConfiguration)
+    if (filters.length > 0) query = FiltersHelper.applyFilters(filters, query)
+    return query
+  }
+
+  static applyActionsFromQuery(reqQuery, fieldsConfiguration, query) {
+    const { actions } = QueryParser.parseQuery(reqQuery, fieldsConfiguration)
+    if (actions.length > 0) query = FiltersHelper.applyActions(actions, query)
+    return query
+  }
+
   static applyFilters(filters, query) {
     filters.forEach((filter) => {
       switch (filter.filterType) {

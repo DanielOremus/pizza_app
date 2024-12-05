@@ -7,7 +7,8 @@ import { optimizeImage } from "../../../utils/ImageManager.mjs"
 
 class MealController {
   static startPage = 0
-  static defaultPerPage = 8
+  static defaultPerPage = 4
+
   static async getList(req, res) {
     try {
       //TODO: add queryHelper

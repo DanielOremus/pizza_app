@@ -33,12 +33,11 @@ export default {
     ...mapActions({ loadProductList: "products/loadList" }),
 
     onApplyFilters(query) {
-      const { type, ...reqQuery } = query
-      this.loadProductList(reqQuery)
+      this.loadProductList(query)
 
       this.$router.push({
         path: this.$route.path,
-        query: reqQuery,
+        query,
       })
     },
   },

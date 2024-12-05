@@ -13,18 +13,27 @@
         <v-col cols="6">
           <div class="header d-flex ga-16 justify-center text-h5">
             <span
-              class="cursor-pointer"
+              :class="{
+                'active-link': isActiveRoute('HomePage'),
+                'cursor-pointer': true,
+              }"
               @click="$router.push({ name: 'HomePage' })"
               >Home</span
             >
 
             <span
-              class="cursor-pointer"
+              :class="{
+                'active-link': isActiveRoute('MenuPage'),
+                'cursor-pointer': true,
+              }"
               @click="$router.push({ name: 'MenuPage' })"
               >Menu</span
             >
             <span
-              class="cursor-pointer"
+              :class="{
+                'active-link': isActiveRoute('AboutPage'),
+                'cursor-pointer': true,
+              }"
               @click="$router.push({ name: 'AboutPage' })"
               >About Us</span
             >
@@ -42,6 +51,16 @@
 <script>
 export default {
   name: "Header",
+  computed: {
+    activeRouteName() {
+      return this.$route.name
+    },
+  },
+  methods: {
+    isActiveRoute(routeName) {
+      return this.activeRouteName === routeName
+    },
+  },
 }
 </script>
 <style lang="scss" scoped>
@@ -68,5 +87,8 @@ export default {
 }
 nav > .v-container {
   box-shadow: 0 10px 15px 2px rgba(0, 0, 0, 0.704);
+}
+.active-link {
+  color: $amber;
 }
 </style>
