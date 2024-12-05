@@ -2,20 +2,40 @@ import Meal from "./Meal.mjs"
 import MongooseCRUDManager from "../MongooseCRUDManager.mjs"
 
 class MealManager extends MongooseCRUDManager {
-  async getList(
-    filters = {},
-    projection = null,
-    options = null,
-    populateFields = []
-  ) {
+  static fieldsConfiguration = [
+    { fieldName: "title", filterCategory: "search" },
+    { fieldName: "price", filterCategory: "range" },
+    { fieldName: "category", filterCategory: "list" },
+  ]
+  // async getList(
+  //   filters = {},
+  //   projection = null,
+  //   options = null,
+  //   populateFields = []
+  // ) {
+  //   try {
+  //     if (filters.title) {
+  //       filters.title = new RegExp(`${filters.title}`, "i")
+  //     }
+  //     const { documents, count } = await super.getList(
+  //       filters,
+  //       projection,
+  //       options,
+  //       populateFields
+  //     )
+
+  //     return { mealList: documents, count }
+  //   } catch (err) {
+  //     return []
+  //   }
+  // }
+
+  async findManyWithQuery(reqQuery, projection = null, populateFields = []) {
     try {
-      if (filters.title) {
-        filters.title = new RegExp(`${filters.title}`, "i")
-      }
-      const { documents, count } = await super.getList(
-        filters,
+      const { documents, count } = await super.findManyWithQuery(
+        reqQuery,
+        MealManager.fieldsConfiguration,
         projection,
-        options,
         populateFields
       )
 

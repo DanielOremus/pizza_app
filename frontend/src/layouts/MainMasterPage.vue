@@ -1,6 +1,6 @@
 <template>
   <div class="main-layout d-flex flex-column">
-    <header>
+    <header class="position-sticky top-0">
       <Header></Header>
     </header>
     <main class="flex-grow-1 d-flex">
@@ -46,5 +46,8 @@ export default {
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+}
+header {
+  z-index: 10;
 }
 </style>

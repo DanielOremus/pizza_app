@@ -66,4 +66,7 @@ export default {
     color: $amber;
   }
 }
+nav > .v-container {
+  box-shadow: 0 10px 15px 2px rgba(0, 0, 0, 0.704);
+}
 </style>

@@ -1,6 +1,52 @@
+import FiltersHelper from "../../../utils/FiltersHelper.mjs"
+
 class MongooseCRUDManager {
   constructor(model) {
     this.model = model
+  }
+  addPopulation(query, populateFields) {
+    for (const field of populateFields) {
+      if (typeof field === "string") {
+        query.populate(field)
+        continue
+      }
+      if (
+        typeof field === "object" &&
+        field.fieldForPopulation &&
+        field.requiredFieldsFromTargetObj
+      ) {
+        query.populate(
+          field.fieldForPopulation,
+          field.requiredFieldsFromTargetObj
+        )
+      }
+    }
+  }
+  async findManyWithQuery(
+    reqQuery,
+    fieldsConfiguration,
+    projection = null,
+    populateFields = []
+  ) {
+    try {
+      let query = this.model.find({}, projection)
+
+      const filledQuery = FiltersHelper.applyAllParamsFromQuery(
+        reqQuery,
+        fieldsConfiguration,
+        query
+      )
+
+      const count = await this.model.countDocuments(filledQuery)
+
+      this.addPopulation(filledQuery, populateFields)
+
+      const documents = await filledQuery.exec()
+
+      return { documents, count }
+    } catch (error) {
+      throw new Error("Error getting data with filters: " + error.message)
+    }
   }
   async getList(
     filters = {},
@@ -11,22 +57,7 @@ class MongooseCRUDManager {
     try {
       const query = this.model.find(filters, projection)
 
-      for (const field of populateFields) {
-        if (typeof field === "string") {
-          query.populate(field)
-          continue
-        }
-        if (
-          typeof field === "object" &&
-          field.fieldForPopulation &&
-          field.requiredFieldsFromTargetObj
-        ) {
-          query.populate(
-            field.fieldForPopulation,
-            field.requiredFieldsFromTargetObj
-          )
-        }
-      }
+      this.addPopulation(query, populateFields)
 
       const count = await this.model.countDocuments(query)
 
@@ -41,22 +72,9 @@ class MongooseCRUDManager {
   async getById(id, projection = {}, populateFields = []) {
     try {
       const query = this.model.findById(id, projection)
-      for (const field of populateFields) {
-        if (typeof field === "string") {
-          query.populate(field)
-          continue
-        }
-        if (
-          typeof field === "object" &&
-          field.fieldForPopulation &&
-          field.requiredFieldsFromTargetObj
-        ) {
-          query.populate(
-            field.fieldForPopulation,
-            field.requiredFieldsFromTargetObj
-          )
-        }
-      }
+
+      this.addPopulation(query, populateFields)
+
       return await query.exec()
     } catch (error) {
       throw new Error("Error getting item by id: " + error.message)
@@ -65,22 +83,9 @@ class MongooseCRUDManager {
   async getOne(filters, projection = {}, populateFields = []) {
     try {
       const query = this.model.findOne(filters, projection)
-      for (const field of populateFields) {
-        if (typeof field === "string") {
-          query.populate(field)
-          continue
-        }
-        if (
-          typeof field === "object" &&
-          field.fieldForPopulation &&
-          field.requiredFieldsFromTargetObj
-        ) {
-          query.populate(
-            field.fieldForPopulation,
-            field.requiredFieldsFromTargetObj
-          )
-        }
-      }
+
+      this.addPopulation(query, populateFields)
+
       return await query.exec()
     } catch (error) {
       throw new Error("Error getting item by filters: " + error.message)

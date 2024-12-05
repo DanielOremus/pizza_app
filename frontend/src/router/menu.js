@@ -17,10 +17,12 @@ export default [
     path: "create",
     component: ProductFormPage,
     name: "ProductCreate",
+    meta: { requiresAuth: true, requiredRole: "Manager" },
   },
   {
     path: "update/:id",
     component: ProductFormPage,
     name: "ProductUpdate",
+    meta: { requiresAuth: true, requiredRole: "Manager" },
   },
 ]

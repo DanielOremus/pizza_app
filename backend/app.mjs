@@ -4,6 +4,7 @@ import initializeMiddlewares from "./middlewares/initialize.mjs"
 import errorHandler from "./middlewares/errorHandler.mjs"
 import sessionConfig from "./config/session.mjs"
 import routes from "./api/v2/routes/index.mjs"
+import QueryParser from "./utils/QueryParser.mjs"
 
 const app = express()
 

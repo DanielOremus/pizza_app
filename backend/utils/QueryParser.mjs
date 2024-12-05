@@ -9,6 +9,7 @@ class QueryParser {
         filterValue = [filterValue]
       }
     }
+    console.log(filterValue)
 
     for (const value of filterValue) {
       if (value.startsWith("gte:")) {
@@ -16,7 +17,8 @@ class QueryParser {
         continue
       }
       if (value.startsWith("lte:")) {
-        maxValue = parseFloat(value.splice(4))
+        maxValue = parseFloat(value.slice(4))
+        console.log(maxValue)
       }
     }
 
@@ -43,7 +45,7 @@ class QueryParser {
     return [
       {
         fieldName,
-        filterType: "list",
+        filterType: "in",
         filterContent: filterValue.split(","),
       },
     ]
@@ -64,26 +66,38 @@ class QueryParser {
 
     fieldsConfiguration.forEach(({ fieldName, filterCategory }) => {
       if (query[fieldName])
-        filters.push(...this[filterCategory](fieldName, query(fieldName)))
+        filters.push(...this[filterCategory](fieldName, query[fieldName]))
     })
+
     console.log(filters)
 
     return filters
   }
   static actionsParser(query) {
     const actions = []
+
     if (query.sort) {
-      const [field, order] = query.sort.split(":")
-      actions.push({ type: "sort", field, order: order === "desc" ? -1 : 1 })
+      const [fieldName, order] = query.sort.split(":")
+      actions.push({
+        actionType: "sort",
+        fieldName,
+        order: order === "desc" ? -1 : 1,
+      })
     }
-    if (query.page && query.perPage) {
-      actions.push({ type: "skip", value: query.page * query.perPage })
-      actions.push({ type: "limit", value: parseInt(query.perPage) })
+    if (query.page >= 0 && query.perPage) {
+      actions.push({ actionType: "skip", value: query.page * query.perPage })
+      actions.push({ actionType: "limit", value: parseInt(query.perPage) })
     }
 
     console.log(actions)
 
     return actions
+  }
+  static parseQuery(query, fieldsConfiguration) {
+    const filters = QueryParser.filtersParser(fieldsConfiguration, query)
+    const actions = QueryParser.actionsParser(query)
+
+    return { filters, actions }
   }
 }
 

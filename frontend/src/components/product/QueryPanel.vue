@@ -1,15 +1,24 @@
 <template>
-  <v-container class="query-panel py-6">
-    <v-card color="grey-darken-4 pa-5 h-100" rounded="xl">
+  <v-container class="query-panel py-10 position-sticky">
+    <v-card color="grey-darken-4 pa-5" rounded="xl">
       <v-text-field
-        name="title"
         clearable
+        ref="titleField"
         label="I'm searching..."
         variant="outlined"
+        v-model="title.value"
+        :rules="title.rules"
+        validate-on="none"
       ></v-text-field>
-      <v-btn block color="grey-darken-1">Search</v-btn>
+      <v-btn
+        block
+        color="grey-darken-1 mt-1"
+        class="font-weight-bold"
+        @click="onSearch"
+        >Search</v-btn
+      >
 
-      <v-divider class="border-opacity-25 my-6" role="presentation"></v-divider>
+      <v-divider class="border-opacity-25 my-6"></v-divider>
 
       <v-select
         :items="sortItems"
@@ -23,9 +32,9 @@
       <v-range-slider
         strict
         class="mx-0"
-        :min="0"
-        :max="500"
-        :step="1"
+        :min="slider.min"
+        :max="slider.max"
+        :step="slider.step"
         color="grey-darken-1"
         v-model="priceRange"
       >
@@ -51,19 +60,29 @@
         </template>
       </v-range-slider>
 
-      <v-list bg-color="grey-darken-4" class="pt-0">
-        <v-list-subheader class="text-body-1 text-grey-darken-1"
+      <v-list
+        class="pt-0 bg-grey-darken-4 mb-6"
+        rounded="lg"
+        border="surface-light opacity-50 sm"
+      >
+        <v-list-subheader
+          class="text-body-1 font-weight-bold text-grey-lighten-1"
           >Category:</v-list-subheader
         >
-        <v-list-item v-for="category in categoryItems">
+        <v-list-item
+          variant="text"
+          density="compact"
+          v-for="category in categoryItems"
+        >
           <v-checkbox
+            density="comfortable"
+            hide-details
             :label="category.title"
             v-model="selectedCategories"
             :value="category._id"
           ></v-checkbox>
         </v-list-item>
       </v-list>
-
       <v-row>
         <v-col cols="12">
           <v-btn color="blue-darken-4" block class="font-weight-bold"
@@ -85,24 +104,38 @@ export default {
   name: "QueryPanel",
   data() {
     return {
-      priceRange: [0, 200],
+      slider: {
+        min: 0,
+        max: 5000,
+        step: 50,
+      },
+      priceRange: [],
+      title: {
+        value: null,
+        rules: [
+          (value) => {
+            if (!value || !value.length) return "Title is required"
+            return true
+          },
+        ],
+      },
       selectedCategories: [],
       sortBy: "name:asc",
       sortItems: [
         {
-          title: "Title: A-Z",
+          title: "Title: A - Z",
           value: "name:asc",
         },
         {
-          title: "Title: Z-A",
+          title: "Title: Z - A",
           value: "name:desc",
         },
         {
-          title: "Price: from low to high",
+          title: "Price: Low - High",
           value: "price:asc",
         },
         {
-          title: "Price: from high to low",
+          title: "Price: High - Low",
           value: "price:desc",
         },
       ],
@@ -114,7 +147,27 @@ export default {
       required: true,
     },
   },
+  methods: {
+    async onSearch() {
+      const errors = await this.$refs.titleField.validate()
+      console.log(errors)
+
+      if (errors.length > 0) return
+
+      this.$emit("panel-event", {
+        title: this.title.value.trim(),
+      })
+    },
+    onApplyFilters() {},
+  },
+  created() {
+    this.priceRange = [this.slider.min, this.slider.max]
+  },
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.query-panel {
+  top: 70px;
+}
+</style>

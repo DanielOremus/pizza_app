@@ -2,8 +2,10 @@ import { createApp } from "vue"
 import store from "@/store/index.js"
 
 //Icons
+import "@mdi/font/css/materialdesignicons.css"
 import "@fortawesome/fontawesome-free/css/all.css"
-import { aliases, fa } from "vuetify/iconsets/fa4"
+import { aliases as faAliases, fa } from "vuetify/iconsets/fa"
+import { aliases as mdiAliases, mdi } from "vuetify/iconsets/mdi"
 
 //Router
 import router from "@/router/index.js"
@@ -35,8 +37,12 @@ const vuetify = createVuetify({
   // },
   icons: {
     defaultSet: "fa",
-    aliases,
+    aliases: {
+      ...mdiAliases,
+      ...faAliases,
+    },
     sets: {
+      mdi,
       fa,
     },
   },

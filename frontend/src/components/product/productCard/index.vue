@@ -2,10 +2,13 @@
   <v-card
     class="card py-6 text-center bg-grey-darken-4"
     align="center"
-    elevation="10"
     rounded="xl"
   >
-    <v-img :src="product.image" height="200px"> </v-img>
+    <v-img
+      :src="product.image ? product.image : '/no-image.jpg'"
+      height="200px"
+    >
+    </v-img>
     <v-card-title primary-title>
       {{ product.title }}
     </v-card-title>
@@ -77,6 +80,9 @@ export default {
 <style scoped lang="scss">
 .card * {
   font-family: $arima;
+}
+.card {
+  box-shadow: 0px 0px 15px 4px rgb(0, 0, 0);
 }
 .action-btn {
   font-weight: 600;

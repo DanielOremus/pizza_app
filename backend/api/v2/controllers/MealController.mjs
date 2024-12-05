@@ -10,6 +10,7 @@ class MealController {
   static defaultPerPage = 8
   static async getList(req, res) {
     try {
+      //TODO: add queryHelper
       // const queryParams = {}
 
       // for (const key in req.query) {
@@ -21,17 +22,15 @@ class MealController {
       console.log(req.query)
 
       let { page, perPage } = req.query
-
       if (!isFinite(page)) page = MealController.startPage
       if (!isFinite(perPage)) perPage = MealController.defaultPerPage
 
-      const skipNumber = parseInt(page * perPage)
-      const limitNumber = parseInt(perPage)
-      const { mealList, count } = await MealManager.getList(
-        {},
-        {},
-        { skip: skipNumber, limit: limitNumber },
+      req.query.page = page
+      req.query.perPage = perPage
 
+      const { mealList, count } = await MealManager.findManyWithQuery(
+        req.query,
+        {},
         ["category"]
       )
 
@@ -45,7 +44,7 @@ class MealController {
         },
       })
     } catch (err) {
-      res.status(500).json({ success: false, error: err })
+      res.status(500).json({ success: false, error: err.message })
       // res.status(500).render("error", { error: err })
     }
   }
@@ -125,7 +124,7 @@ class MealController {
       await ReviewManager.deleteMany({ meal: meal._id })
       res.json({ success: true, data: meal })
     } catch (err) {
-      res.status(500).json({ suceess: false, error: err })
+      res.status(500).json({ success: false, error: err.message })
     }
   }
   // static async renderForm(req, res) {

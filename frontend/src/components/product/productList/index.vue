@@ -64,10 +64,10 @@ export default {
 <style scoped>
 .list {
   display: grid;
-  grid-template-columns: repeat(4, 250px);
-  justify-content: start;
+  grid-template-columns: repeat(4, 1fr);
+  justify-content: center;
   align-items: baseline;
-  row-gap: 8%;
+  row-gap: 2rem;
   column-gap: 5%;
 }
 </style>

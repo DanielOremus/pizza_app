@@ -67,8 +67,7 @@ export default {
         commit("setLoading", true)
         const response = await axios.get(apiEndpoints.products.getAll, {
           params: {
-            perPage: payload.perPage ?? rootGetters["pagination/itemsPerPage"],
-            page: payload.page ?? rootGetters["pagination/startPage"],
+            ...payload,
           },
         })
         const resData = response.data
