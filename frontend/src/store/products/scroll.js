@@ -5,7 +5,13 @@ import FormDataHelper from "@/utils/FormDataHelper.js"
 export default {
   namespaced: true,
   state: {
-    currentPageProducts: [],
+    currentProducts: [
+      {
+        title: "1",
+        price: 222,
+        description: "sss",
+      },
+    ],
     isLoading: false,
     totalProductsNumber: 0,
     productsPerPage: 8,
@@ -19,7 +25,7 @@ export default {
     //   return state.productList.find((el) => el._id === id)
     // },
     currentProducts(state) {
-      return state.currentPageProducts
+      return state.currentProducts
     },
     currentPage(state) {
       return state.currentPage
@@ -32,45 +38,53 @@ export default {
     },
   },
   mutations: {
+    setCurrentPage(state, pageNum) {
+      state.currentPage = pageNum
+    },
     setLoading(state, status) {
       state.isLoading = status
     },
+    setProductList(state, payload) {
+      state.currentProducts = payload.items
+    },
     pushProducts(state, payload) {
-      state.currentPageProducts.push(payload.items)
+      state.currentProducts.push(...payload.items)
       state.totalProductsNumber = payload.totalItems
       state.productsPerPage = payload.perPage
       state.currentPage = payload.currentPage
     },
-    setCurrentProducts(state, payload) {
-      state.currentPageProducts = payload.items
-      state.totalProductsNumber = payload.totalItems
-      state.productsPerPage = payload.perPage
-      state.currentPage = payload.currentPage
-    },
+
     addProduct(state, payload) {
       state.productList.push(payload.product)
     },
     updateProduct(state, payload) {
-      const productIndex = state.currentPageProducts.findIndex(
+      const productIndex = state.currentProducts.findIndex(
         (el) => el._id === payload.productId
       )
       if (productIndex === -1) return
-      let product = state.currentPageProducts[productIndex]
+      let product = state.currentProducts[productIndex]
       product = { ...product, ...payload.newData }
-      state.currentPageProducts.splice(productIndex, 1, product)
+      state.currentProducts.splice(productIndex, 1, product)
     },
     deleteProduct(state, id) {
-      state.currentPageProducts = state.currentPageProducts.filter(
+      state.currentProducts = state.currentProducts.filter(
         (el) => el._id !== id
       )
     },
   },
   actions: {
-    async loadList({ commit, getters, rootGetters }, payload = {}) {
+    setCurrentPage({ commit }, value) {
+      commit("setCurrentPage", parseInt(value))
+    },
+    setProductList({ commit }, list) {
+      commit("setProductList", { items: list })
+    },
+    async loadScrollList({ commit }, payload = {}) {
       try {
+        commit("setLoading", true)
+
         console.log(payload)
 
-        commit("setLoading", true)
         const response = await axios.get(apiEndpoints.products.getAll, {
           params: {
             ...payload,
@@ -79,14 +93,14 @@ export default {
         const resData = response.data
         console.log(resData)
 
-        commit("setCurrentProducts", resData.data)
+        commit("pushProducts", resData.data)
       } catch (error) {
         console.log(error)
+        throw error
       } finally {
         commit("setLoading", false)
       }
     },
-
     async loadById({ commit }, id) {
       try {
         commit("setLoading", true)

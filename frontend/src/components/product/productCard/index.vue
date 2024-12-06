@@ -13,7 +13,7 @@
       {{ product.title }}
     </v-card-title>
     <v-card-subtitle class="card-subtitle text-subtitle-1">
-      {{ product.category.title }}
+      {{ product.category?.title }}
       <v-spacer />
       {{ product.price }}₴
     </v-card-subtitle>

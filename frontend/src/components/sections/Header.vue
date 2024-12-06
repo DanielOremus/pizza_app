@@ -31,6 +31,14 @@
             >
             <span
               :class="{
+                'active-link': isActiveRoute('MenuPageScroll'),
+                'cursor-pointer': true,
+              }"
+              @click="$router.push({ name: 'MenuPageScroll' })"
+              >Menu (Scroll)</span
+            >
+            <span
+              :class="{
                 'active-link': isActiveRoute('AboutPage'),
                 'cursor-pointer': true,
               }"

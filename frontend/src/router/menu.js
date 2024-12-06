@@ -1,12 +1,18 @@
 import SpecificProductPage from "@/pages/SpecificProductPage.vue"
 import ProductFormPage from "@/pages/ProductFormPage.vue"
 import MenuPage from "@/pages/MenuPage.vue"
+import MenuPageScroll from "@/pages/MenuPageScroll.vue"
 
 export default [
   {
     path: "",
     component: MenuPage,
     name: "MenuPage",
+  },
+  {
+    path: "scroll",
+    component: MenuPageScroll,
+    name: "MenuPageScroll",
   },
   {
     path: ":id",
