@@ -1,25 +1,25 @@
 <template>
   <v-container class="list-container d-flex flex-column h-100">
-    <v-container class="scroll-container flex-grow-1 py-10 min-h-100">
-      <v-infinite-scroll
-        color="white"
-        :items="currentProducts"
-        @load="onScroll"
-      >
-        <v-container class="list">
-          <ProductCard
-            v-for="product in currentProducts"
-            :key="product._id"
-            :product="product"
-          ></ProductCard>
-        </v-container>
-        <template v-slot:empty class="empty-message-container">
-          <v-alert type="warning" class="text-h6"
-            >Sorry, we couldn't find more dishes!</v-alert
-          >
-        </template>
-      </v-infinite-scroll>
+    <v-container
+      v-if="currentProducts.length > 0 || !isLoading"
+      class="list flex-grow-1 py-10 min-h-100"
+    >
+      <ProductCard
+        v-for="product in currentProducts"
+        :key="product._id"
+        :product="product"
+      ></ProductCard>
     </v-container>
+
+    <div class="spinner-container d-flex justify-center" v-if="isLoading">
+      <v-sheet
+        class="text-white d-inline-flex pa-2"
+        color="grey-darken-4"
+        rounded="lg"
+      >
+        <v-progress-circular indeterminate></v-progress-circular>
+      </v-sheet>
+    </div>
   </v-container>
 </template>
 
@@ -30,11 +30,7 @@ import { mapActions, mapGetters } from "vuex"
 export default {
   name: "ProductListScroll",
   components: { ProductCard },
-  data() {
-    return {
-      doneFunc: null,
-    }
-  },
+
   computed: {
     ...mapGetters("productsScroll", [
       "currentProducts",
@@ -45,53 +41,26 @@ export default {
     ]),
   },
   methods: {
-    ...mapActions("productsScroll", [
-      "loadScrollList",
-      "setCurrentPage",
-      "setProductList",
-    ]),
-
-    async onScroll({ done }, query = this.$route.query) {
-      console.log(this.isLoading)
-      this.doneFunc = done
-      if (this.isLoading) {
-        return done("ok")
-      }
-      console.log(this.currentProducts)
-
-      if (this.totalProductsNumber <= this.currentProducts.length) {
-        console.log("Second")
-
-        return done("empty")
-      }
-      try {
-        await this.loadScrollList({
-          ...query,
-          page: this.currentPage + 1,
-        })
-
-        // this.setCurrentPage(this.currentPage + 1)
-        console.log(this.currentPage)
-
-        done("ok")
-      } catch (error) {
-        done("error")
+    ...mapActions("productsScroll", ["loadList", "setProductList"]),
+    async onScroll() {
+      if (
+        window.innerHeight + window.scrollY >=
+        document.body.offsetHeight - 100
+      ) {
+        if (this.isLoading) return
+        if (this.totalProductsNumber <= this.currentProducts.length) return
+        this.loadList({ ...this.$route.query, page: this.currentPage + 1 })
       }
     },
   },
-  // watch: {
-  //   "$route.query": {
-  //     handler() {
-  //       this.onScroll()
-  //     },
-  //   },
-  // },
-  // unmounted() {
-  //   this.setProductList([])
-  // },
-  async mounted() {
+
+  mounted() {
     this.setProductList([])
-    await this.loadScrollList({ ...this.$route.query, page: 0 })
+    this.loadList({ ...this.$route.query, page: 0 })
+    window.addEventListener("scroll", this.onScroll)
+  },
+  unmounted() {
+    window.removeEventListener("scroll", this.onScroll)
   },
 }
 </script>

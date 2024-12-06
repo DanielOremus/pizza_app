@@ -5,13 +5,7 @@ import FormDataHelper from "@/utils/FormDataHelper.js"
 export default {
   namespaced: true,
   state: {
-    currentProducts: [
-      {
-        title: "1",
-        price: 222,
-        description: "sss",
-      },
-    ],
+    currentProducts: [],
     isLoading: false,
     totalProductsNumber: 0,
     productsPerPage: 8,
@@ -79,11 +73,9 @@ export default {
     setProductList({ commit }, list) {
       commit("setProductList", { items: list })
     },
-    async loadScrollList({ commit }, payload = {}) {
+    async loadList({ commit }, payload = {}) {
       try {
         commit("setLoading", true)
-
-        console.log(payload)
 
         const response = await axios.get(apiEndpoints.products.getAll, {
           params: {

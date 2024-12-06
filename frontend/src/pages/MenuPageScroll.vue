@@ -7,7 +7,7 @@
             :category-items="categoryList"
             @panel-event="onApplyFilters"
         /></v-col>
-        <v-col cols="8"> <ProductListScroll ref="ProductListScroll" /></v-col>
+        <v-col cols="8"> <ProductListScroll /></v-col>
       </v-row>
     </div>
   </MainMasterPage>
@@ -30,22 +30,13 @@ export default {
   },
   methods: {
     ...mapActions({ loadCategoryList: "categories/loadList" }),
-    ...mapActions({ loadProductList: "productsScroll/loadScrollList" }),
+    ...mapActions({ loadProductList: "productsScroll/loadList" }),
     ...mapActions("productsScroll", ["setProductList"]),
 
     async onApplyFilters(query) {
       this.setProductList([])
-
-      await this.loadProductList(query)
-      console.log("From Menu")
-      console.log(this.$refs.ProductListScroll.doneFunc)
-
-      this.$refs.ProductListScroll.onScroll(
-        {
-          done: this.$refs.ProductListScroll.doneFunc,
-        },
-        query
-      )
+      window.scrollTo({ top: 0, behavior: "smooth" })
+      this.loadProductList(query)
 
       this.$router.push({
         path: this.$route.path,
