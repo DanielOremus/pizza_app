@@ -21,7 +21,7 @@
       ></ProductCard>
       <div
         class="not-found-container d-flex flex-grow-1 min-h-100 align-center justify-center"
-        v-if="!currentProducts.length"
+        v-if="!totalProductsNumber"
       >
         <v-sheet
           class="text-white pa-2"
