@@ -25,7 +25,7 @@ const userSchema = new Schema({
   role: {
     type: Schema.Types.ObjectId,
     ref: "Role",
-    default: new mongoose.Types.ObjectId("67389b5b108ca03b51ba2d16"),
+    required: true,
   },
 })
 userSchema.set("toObject", { virtuals: true })
@@ -43,5 +43,9 @@ userSchema.pre("save", async function (next) {
 userSchema.virtual("fullName").get(function () {
   return `${this.firstName} ${this.lastName}`
 })
+
+userSchema.methods.validatePassword = async function (password) {
+  return await bcrypt.compare(password, this.password)
+}
 
 export default mongoose.model("User", userSchema)

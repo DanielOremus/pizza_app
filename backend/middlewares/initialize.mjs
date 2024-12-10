@@ -33,9 +33,10 @@ export default (app) => {
   app.use(express.static(path.join(__dirname, "../public")))
   app.use(express.static(path.join(__dirname, "../uploads")))
 
-  app.use(sessionConfig)
+  // app.use(sessionConfig)
   app.use(passport.initialize())
-  app.use(passport.session())
+  // app.use(passport.session())
+  // app.use(passport.)
 
   // app.use(flash())
 }

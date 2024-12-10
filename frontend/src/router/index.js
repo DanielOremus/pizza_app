@@ -1,8 +1,8 @@
 import { createWebHistory, createRouter } from "vue-router"
+import AuthPage from "@/pages/AuthPage.vue"
 import mainRoutes from "./main.js"
 import menuRoutes from "./menu.js"
-import MenuPage from "@/pages/MenuPage.vue"
-// import authRoutes from "./auth.js"
+import authRoutes from "./auth.js"
 
 const routes = [
   {
@@ -14,10 +14,11 @@ const routes = [
     // component: MenuPage,
     children: [...menuRoutes],
   },
-  // {
-  //   path: "/auth",
-  //   children: [...authRoutes],
-  // },
+  {
+    path: "/auth",
+    component: AuthPage,
+    children: [...authRoutes],
+  },
 ]
 
 const router = createRouter({

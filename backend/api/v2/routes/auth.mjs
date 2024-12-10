@@ -13,13 +13,13 @@ router.get("/logout", ensureAuthenticated, AuthController.logout)
 
 router.post(
   "/login",
-  ensureNotAuthenticated,
+  // ensureNotAuthenticated,
   checkSchema(AuthValidator.loginSchema),
   AuthController.login
 )
 router.post(
   "/signup",
-  ensureNotAuthenticated,
+  // ensureNotAuthenticated,
   checkSchema(AuthValidator.signupSchema),
   AuthController.signup
 )

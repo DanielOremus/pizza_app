@@ -10,6 +10,10 @@ const roleSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  permissions: {
+    type: Object,
+    required: true,
+  },
 })
 
 export default mongoose.model("Role", roleSchema)

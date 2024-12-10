@@ -19,8 +19,8 @@ router.get("/:id", MealController.getSpecific)
 router.post(
   "/form/:id?",
   upload.single("image"),
-  // ensureAuthenticated,
-  // ensureManager,
+  ensureAuthenticated,
+  ensureManager,
   checkSchema(MealValidator.schema),
   MealController.updateMeal
 )

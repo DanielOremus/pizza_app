@@ -19,12 +19,12 @@ import * as directives from "vuetify/directives"
 // Components
 import App from "./App.vue"
 
-const myDarkTheme = {
-  dark: true,
-  colors: {
-    error: "#B00020",
-  },
-}
+// const myDarkTheme = {
+//   dark: true,
+//   colors: {
+//     error: "#B00020",
+//   },
+// }
 
 const vuetify = createVuetify({
   components,

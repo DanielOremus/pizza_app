@@ -9,32 +9,29 @@ class UserController {
       res.status(500).json({ success: false, msg: error.message })
     }
   }
-  static async add(req, res) {
+  static async getSpecific(req, res) {
+    const id = req.params.id
+    const isShort = req.body.isShort || true
+    const projection = isShort
+      ? { fullName: 1, firstName: 1, lastName: 1, permissions: 1, role: 1 }
+      : { password: 0 }
+    const populateFields = isShort
+      ? [
+          {
+            fieldForPopulation: "role",
+            requiredFieldsFromTargetObj: "permissions",
+          },
+        ]
+      : ["role"]
     try {
-      const { firstName, lastName, jobStartDate } = req.body
-      const user = await UserManager.create({
-        firstName,
-        lastName,
-        jobStartDate,
-      })
-      res.json({ success: true, data: user })
-    } catch (error) {
-      res.status(400).json({ success: false, msg: error.message })
-    }
-  }
-  static async delete(req, res) {
-    try {
-      const id = req.body.id
-      if (!id)
-        return res
-          .status(400)
-          .json({ success: false, msg: "ID is not provided" })
-
-      const user = await UserManager.deleteById(id)
-      if (!user)
+      const user = await UserManager.getById(id, projection, populateFields)
+      if (!user) {
         return res.status(404).json({ success: false, msg: "User not found" })
-
-      res.json({ success: true })
+      }
+      return res.json({
+        success: true,
+        data: { user },
+      })
     } catch (error) {
       res.status(500).json({ success: false, msg: error.message })
     }

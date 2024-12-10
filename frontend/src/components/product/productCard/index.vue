@@ -26,6 +26,7 @@
         >View</v-btn
       >
       <v-btn
+        v-if="isAuthenticated && userPermissions?.menu?.edit"
         color="info"
         class="action-btn w-75"
         rounded="lg"
@@ -33,6 +34,7 @@
         >Edit</v-btn
       >
       <v-btn
+        v-if="isAuthenticated && userPermissions?.menu?.delete"
         color="error"
         class="action-btn w-75"
         rounded="lg"
@@ -43,7 +45,7 @@
   </v-card>
 </template>
 <script>
-import { mapActions } from "vuex"
+import { mapActions, mapGetters } from "vuex"
 export default {
   name: "ProductCard",
 
@@ -52,6 +54,9 @@ export default {
       type: Object,
       required: true,
     },
+  },
+  computed: {
+    ...mapGetters("user", ["userPermissions", "isAuthenticated"]),
   },
   methods: {
     ...mapActions("products", ["deleteById"]),

@@ -11,17 +11,6 @@ class MealController {
 
   static async getList(req, res) {
     try {
-      //TODO: add queryHelper
-      // const queryParams = {}
-
-      // for (const key in req.query) {
-      //   if (req.query[key]) queryParams[key] = req.query[key]
-      // }
-      // const mealList = await MealManager.getList(queryParams, {}, {}, [
-      //   "category",
-      // ])
-      console.log(req.query)
-
       let { page, perPage } = req.query
       if (!isFinite(page)) page = MealController.startPage
       if (!isFinite(perPage)) perPage = MealController.defaultPerPage
@@ -128,25 +117,7 @@ class MealController {
       res.status(500).json({ success: false, error: err.message })
     }
   }
-  // static async renderForm(req, res) {
-  //   try {
-  //     const { id } = req.params
-  //     let mealObj = null
-  //     if (id) {
-  //       mealObj = await MealManager.getById(id)
-  //     }
-  //     res.render("layouts/main", {
-  //       title: "Form",
-  //       body: "../meals/form",
-  //       user: req.user,
-  //       categories: await CategoryManager.getList(),
-  //       meal: mealObj,
-  //       errors: [],
-  //     })
-  //   } catch (err) {
-  //     res.status(500).render("error", { error: err })
-  //   }
-  // }
+
   static async addReview(req, res) {
     // const id = req.body.mealId
     const id = req.params.id

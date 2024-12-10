@@ -1,53 +1,70 @@
-import passport from "passport"
+import RoleManager from "../models/role/RoleManager.mjs"
+import JWTHelper from "../../../utils/JWTHelper.mjs"
 import UserManager from "../models/user/UserManager.mjs"
 import { validationResult } from "express-validator"
 class AuthController {
-  static login(req, res, next) {
-    const errors = validationResult(req)
-    const { email } = req.body
-    if (!errors.isEmpty()) {
-      return res
-        .status(400)
-        .json({
-          success: false,
-          msg: "Something went wrong",
-          errors: errors.array(),
-        })
-    }
-    passport.authenticate("local", (err, user, info) => {
-      if (err) return next(err)
-      if (!user)
-        return res.status(400).render("auth/login", {
-          formData: { email },
-          errors: [{ path: "email-password", msg: info.message }],
-        })
-      req.login(user, (err) => {
-        if (err) return next(err)
-        res.redirect("/menu")
-      })
-    })(req, res, next)
-  }
-  static async signup(req, res, next) {
+  static async signup(req, res) {
     const { email, password, firstName, lastName } = req.body
-    const newUser = { email, password, firstName, lastName }
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
-      return res.status(400).render("auth/signup", {
-        formData: newUser,
+      return res.status(400).json({ success: false, errors: errors.array() })
+    }
+
+    const newUser = { email, password, firstName, lastName }
+    try {
+      const user = await UserManager.create(newUser)
+      const payload = { _id: user._id }
+      const token = JWTHelper.prepareToken(payload, req.headers)
+
+      res.json({
+        success: true,
+        data: {
+          token,
+        },
+      })
+    } catch (error) {
+      return res.status(400).json({
+        success: false,
+        msg: error.message,
+      })
+    }
+  }
+  static async login(req, res) {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        success: false,
+        msg: "Something went wrong",
         errors: errors.array(),
       })
     }
+
+    const { email, password } = req.body
     try {
-      const user = await UserManager.create(newUser)
-      req.login(user, (err) => {
-        if (err) return next(err)
-        res.redirect("/")
+      const user = await UserManager.getOne({ email })
+      if (!user)
+        return res
+          .status(400)
+          .json({ success: false, msg: "Incorrect email or password" })
+
+      const isMatch = await user.validatePassword(password)
+      if (!isMatch) {
+        return res
+          .status(400)
+          .json({ success: false, msg: "Incorrect email or password" })
+      }
+
+      const payload = { _id: user._id }
+      const token = JWTHelper.prepareToken(payload, req.headers)
+
+      res.json({
+        success: true,
+        data: {
+          token,
+        },
       })
     } catch (error) {
-      return res.status(400).render("auth/signup", {
-        formData: newUser,
-        errors: [{ msg: error.message }],
-      })
+      return res.status(500).json({ success: false, msg: err.message })
     }
   }
   static logout(req, res) {

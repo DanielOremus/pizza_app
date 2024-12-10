@@ -11,4 +11,11 @@ export default {
   categories: {
     getAll: `${API_BASE}/categories`,
   },
+  auth: {
+    login: `${API_BASE}/auth/login`,
+    signup: `${API_BASE}/auth/signup`,
+  },
+  user: {
+    profile: (id) => `${API_BASE}/users/${id}`,
+  },
 }

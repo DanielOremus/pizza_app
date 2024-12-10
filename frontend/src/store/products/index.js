@@ -1,4 +1,4 @@
-import axios from "axios"
+import { axiosPublic, axiosPrivate } from "@/config/axios.js"
 import apiEndpoints from "@/api/apiEndpoints.js"
 import FormDataHelper from "@/utils/FormDataHelper.js"
 
@@ -71,7 +71,7 @@ export default {
         console.log(payload)
 
         commit("setLoading", true)
-        const response = await axios.get(apiEndpoints.products.getAll, {
+        const response = await axiosPublic.get(apiEndpoints.products.getAll, {
           params: {
             ...payload,
           },
@@ -90,7 +90,9 @@ export default {
     async loadById({ commit }, id) {
       try {
         commit("setLoading", true)
-        const response = await axios.get(apiEndpoints.products.getById(id))
+        const response = await axiosPublic.get(
+          apiEndpoints.products.getById(id)
+        )
 
         const resData = response.data
 
@@ -103,7 +105,9 @@ export default {
     },
     async deleteById({ commit }, id) {
       try {
-        await axios.delete(apiEndpoints.products.deleteById, { data: { id } })
+        await axiosPrivate.delete(apiEndpoints.products.deleteById, {
+          data: { id },
+        })
         commit("deleteProduct", id)
       } catch (error) {
         console.log(error)
@@ -112,7 +116,7 @@ export default {
     async addProduct({ commit }, data) {
       const formData = FormDataHelper.parseToFormData(data)
       try {
-        const response = await axios.post(
+        const response = await axiosPrivate.post(
           apiEndpoints.products.create,
           formData,
           {
@@ -134,7 +138,7 @@ export default {
     async updateProduct({ commit }, data) {
       const formData = FormDataHelper.parseToFormData(data.newData)
       try {
-        const response = await axios.post(
+        const response = await axiosPrivate.post(
           apiEndpoints.products.updateById(data.productId),
           formData,
           {
