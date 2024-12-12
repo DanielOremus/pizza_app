@@ -1,6 +1,7 @@
 import { axiosPublic, axiosPrivate } from "@/config/axios.js"
 import { jwtDecode } from "jwt-decode"
 import apiEndpoints from "@/api/apiEndpoints.js"
+import ErrorParser from "@/utils/ErrorParser.js"
 export default {
   namespaced: true,
   state: {
@@ -21,8 +22,6 @@ export default {
       return state.fullName
     },
     isAuthenticated() {
-      console.log(Boolean(localStorage.getItem("jwt_token")))
-
       return Boolean(localStorage.getItem("jwt_token"))
     },
   },
@@ -39,7 +38,7 @@ export default {
     },
   },
   actions: {
-    async loadUserData({ commit, getters }, payload) {
+    async loadUserData({ commit, getters, dispatch }, payload) {
       const { fullName, role } = getters.userShortInfo
 
       if (fullName && role) {
@@ -58,10 +57,13 @@ export default {
         console.log(resData)
 
         if (!resData.success) {
+          dispatch("logout")
           return console.log(resData)
         }
         commit("setUserData", resData.data.user)
       } catch (error) {
+        dispatch("logout")
+
         console.log(error)
       }
     },
@@ -76,18 +78,47 @@ export default {
 
         if (!resData.success) {
           console.log(resData)
-          return
+          //TODO: add resErr handler
+          return false
         }
         const token = resData.data.token
         localStorage.setItem("jwt_token", token)
 
         await dispatch("loadUserData", { token, isShort: true })
-        return true
+        return []
       } catch (error) {
         console.log(error)
       }
     },
-    async signup({ commit, dispatch }, data) {},
+    async signup({ commit, dispatch }, payload) {
+      try {
+        const response = await axiosPublic.post(
+          apiEndpoints.auth.signup,
+          payload,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+            validateStatus: (status) =>
+              (status >= 200 && status < 300) || status === 400,
+          }
+        )
+        const resData = response.data
+
+        if (!resData.success) {
+          return ErrorParser.parseErrors(resData.errors)
+        }
+
+        const token = resData.data.token
+        localStorage.setItem("jwt_token", token)
+
+        await dispatch("loadUserData", { token, isShort: true })
+
+        return []
+      } catch (error) {
+        console.log(error)
+      }
+    },
     logout({ commit }) {
       localStorage.removeItem("user")
       localStorage.removeItem("jwt_token")

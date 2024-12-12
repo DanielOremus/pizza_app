@@ -62,14 +62,23 @@
             class="d-flex profile-section align-center justify-center ga-5"
           >
             <span class="text-h5 cursor-pointer">{{ userFullName }}</span>
-            <v-hover v-slot:default="{ isHovering }">
+
+            <v-icon
+              class="logout-icon"
+              icon="fas fa-right-from-bracket"
+              size="x-large"
+              @click="onLogout"
+            ></v-icon>
+
+            <div
+              class="cart-icon-wrapper pa-3 ml-2 cursor-pointer border-lg border-warning rounded-circle border-opacity-100"
+            >
               <v-icon
-                class="logout-icon"
-                icon="fas fa-right-from-bracket"
-                size="x-large"
-                @click="onLogout"
+                color="warning"
+                @click="$router.push({ name: 'CartPage' })"
+                icon="fas fa-shopping-cart"
               ></v-icon>
-            </v-hover>
+            </div>
           </div>
         </v-col>
       </v-row>
@@ -125,6 +134,7 @@ export default {
 }
 .profile-section {
   min-height: 44px;
+  max-height: 44px;
 }
 .main-title {
   font-weight: 700;

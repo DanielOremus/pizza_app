@@ -51,7 +51,7 @@ class AuthValidator {
         bail: true,
       },
       isEmail: {
-        errorMessage: "Oops! That doesn’t look like a valid email address.",
+        errorMessage: "Oops! That doesn’t look like a valid email address",
       },
       custom: {
         options: async (value) => {
@@ -60,7 +60,7 @@ class AuthValidator {
             { _id: 1 }
           )
           if (user) {
-            throw new Error("Email is already in use")
+            throw new Error("This email is already in use")
           }
           return true
         },

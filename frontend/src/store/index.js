@@ -3,6 +3,7 @@ import products from "./products/index.js"
 import categories from "./categories/index.js"
 import productsScroll from "./products/scroll.js"
 import user from "./user/index.js"
+import cart from "./cart/index.js"
 // import reviews from "./reviews/index.js"
 
 const store = createStore({
@@ -12,6 +13,7 @@ const store = createStore({
     productsScroll,
     // reviews,
     user,
+    cart,
   },
 })
 

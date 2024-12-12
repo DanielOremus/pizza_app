@@ -18,4 +18,10 @@ export default {
   user: {
     profile: (id) => `${API_BASE}/users/${id}`,
   },
+  cart: {
+    getCartDetails: `${API_BASE}/cart`,
+    addMealToCart: `${API_BASE}/cart/add-meal`,
+    deleteMealFromCart: `${API_BASE}/cart/delete-meal`,
+    updateMealAmount: `${API_BASE}/cart/update-meal-amount`,
+  },
 }

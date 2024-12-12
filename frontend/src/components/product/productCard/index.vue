@@ -26,6 +26,14 @@
         >View</v-btn
       >
       <v-btn
+        v-if="isAuthenticated"
+        color="warning"
+        class="action-btn w-75"
+        rounded="lg"
+        @click="onAddToCart(product._id)"
+        >Add to Cart</v-btn
+      >
+      <v-btn
         v-if="isAuthenticated && userPermissions?.menu?.edit"
         color="info"
         class="action-btn w-75"
@@ -60,6 +68,7 @@ export default {
   },
   methods: {
     ...mapActions("products", ["deleteById"]),
+    ...mapActions("cart", ["addMealToCart"]),
     async onDelete(id) {
       try {
         await this.deleteById(id)
@@ -79,6 +88,9 @@ export default {
         params: { id },
       })
     },
+    onAddToCart(mealId) {
+      this.addMealToCart(mealId)
+    },
   },
 }
 </script>
@@ -91,6 +103,5 @@ export default {
 }
 .action-btn {
   font-weight: 600;
-  // font-variant: ;
 }
 </style>

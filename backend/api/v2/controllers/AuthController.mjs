@@ -4,15 +4,18 @@ import UserManager from "../models/user/UserManager.mjs"
 import { validationResult } from "express-validator"
 class AuthController {
   static async signup(req, res) {
-    const { email, password, firstName, lastName } = req.body
+    console.log(req.body)
+
     const errors = validationResult(req)
+
     if (!errors.isEmpty()) {
       return res.status(400).json({ success: false, errors: errors.array() })
     }
-
+    const { email, password, firstName, lastName } = req.body
     const newUser = { email, password, firstName, lastName }
     try {
-      const user = await UserManager.create(newUser)
+      const guestRole = await RoleManager.getOne({ title: "Guest" })
+      const user = await UserManager.create({ ...newUser, role: guestRole._id })
       const payload = { _id: user._id }
       const token = JWTHelper.prepareToken(payload, req.headers)
 

@@ -126,6 +126,13 @@ class MongooseCRUDManager {
     try {
       return await this.model.deleteMany(filers)
     } catch (error) {
+      throw new Error("Error deleting items by filters: " + error.message)
+    }
+  }
+  async deleteOne(filers) {
+    try {
+      return await this.model.deleteOne(filers)
+    } catch (error) {
       throw new Error("Error deleting item by filters: " + error.message)
     }
   }

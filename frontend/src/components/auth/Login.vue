@@ -31,8 +31,15 @@
 
         <v-row>
           <v-col>
+            <v-card-text @click="$router.push({ name: 'SignUpPage' })">
+              <span
+                class="text-grey-darken-1 cursor-pointer text-decoration-underline"
+              >
+                Don't have account?
+              </span>
+            </v-card-text>
             <v-btn
-              color="success"
+              color="grey-lighten-2"
               class="w-100 font-weight-bold"
               type="submit"
               :disabled="!isDataValid"
@@ -46,7 +53,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex"
+import { mapActions, mapGetters } from "vuex"
 export default {
   name: "LoginForm",
   data() {
@@ -74,6 +81,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters("user", ["isAuthenticated"]),
     isDataValid() {
       return this.form
     },
@@ -92,7 +100,9 @@ export default {
       }
     },
   },
-  async mounted() {},
+  beforeMount() {
+    if (this.isAuthenticated) this.$router.push({ name: "HomePage" })
+  },
 }
 </script>
 

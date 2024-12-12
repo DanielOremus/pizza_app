@@ -3,6 +3,9 @@ import AuthPage from "@/pages/AuthPage.vue"
 import mainRoutes from "./main.js"
 import menuRoutes from "./menu.js"
 import authRoutes from "./auth.js"
+import cartRoutes from "./cart.js"
+import store from "../store/index.js"
+import CartPage from "../pages/CartPage.vue"
 
 const routes = [
   {
@@ -19,6 +22,8 @@ const routes = [
     component: AuthPage,
     children: [...authRoutes],
   },
+
+  { path: "/cart", children: [...cartRoutes], meta: { requiresAuth: true } },
 ]
 
 const router = createRouter({
@@ -26,12 +31,15 @@ const router = createRouter({
   routes,
 })
 
-// router.beforeEach((to, from) => {
-//   if (to.meta.requriesAuth) {
-//     return {
-//       path: "",
-//     }
-//   }
-// })
+router.beforeEach((to, from) => {
+  if (to.meta.requiresAuth) {
+    const isAuthenticated = store.getters["user/isAuthenticated"]
+    if (!isAuthenticated) {
+      console.warn("You are not authenticated!")
+      router.push({ name: "LoginPage" })
+      return false
+    }
+  }
+})
 
 export default router

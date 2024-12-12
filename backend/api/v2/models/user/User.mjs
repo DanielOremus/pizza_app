@@ -1,6 +1,7 @@
 import mongoose, { Schema } from "mongoose"
 import bcrypt from "bcrypt"
 import Role from "../role/Role.mjs"
+import CartManager from "../cart/CartManager.mjs"
 const userSchema = new Schema({
   email: {
     type: String,
@@ -40,6 +41,12 @@ userSchema.pre("save", async function (next) {
   this.password = passwordHash
   next()
 })
+
+userSchema.post("save", async function (doc) {
+  const cart = await CartManager.getOne({ customer: doc._id })
+  if (!cart) await CartManager.create({ customer: doc._id, mealsList: [] })
+})
+
 userSchema.virtual("fullName").get(function () {
   return `${this.firstName} ${this.lastName}`
 })
