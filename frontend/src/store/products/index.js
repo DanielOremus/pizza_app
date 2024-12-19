@@ -138,7 +138,7 @@ export default {
     async updateProduct({ commit }, data) {
       const formData = FormDataHelper.parseToFormData(data.newData)
       try {
-        const response = await axiosPrivate.put(
+        const response = await axiosPrivate.post(
           apiEndpoints.products.updateById(data.productId),
           formData,
           {
